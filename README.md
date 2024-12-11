@@ -4,14 +4,14 @@
 
 **Модульная схема:**
 
-![alt text](auth-service/srs/attachements/image-2.png)
+![alt text](srs/attachements/image-2.png)
 
 **Диаграма контейнеров приложения C2**
 
-![alt text](auth-service/srs/attachements/image-1.png)
+![alt text](srs/attachements/image-1.png)
 
 
-## [Auth service - Sprint 6](auth-service/srs/auth.md)
+## [Auth service - Sprint 6](srs/auth.md)
 
 ## Запуск приложения
 
