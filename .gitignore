@@ -1,0 +1,5 @@
+.vscode/
+.vscode
+
+# ignore ALL .log files
+*.log
