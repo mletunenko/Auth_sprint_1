@@ -3,7 +3,7 @@ from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.postgres import pg_helper
-from schemas.user import UserCreateIn, UserBaseOut
+from schemas.user import UserBaseOut, UserCreateIn
 from services.users import create_user as services_create_user
 
 router = APIRouter()

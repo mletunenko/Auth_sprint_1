@@ -1,10 +1,10 @@
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import (
-    create_async_engine,
     AsyncEngine,
-    async_sessionmaker,
     AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
 )
 
 from core.config import settings
@@ -26,11 +26,13 @@ class PostgresHelper:
             pool_size=pool_size,
             max_overflow=max_overflow,
         )
-        self.session_factory: async_sessionmaker[AsyncSession] = async_sessionmaker(
+        self.session_factory: async_sessionmaker[AsyncSession] =(
+            async_sessionmaker(
             bind=self.engine,
             autoflush=False,
             autocommit=False,
             expire_on_commit=False,
+            )
         )
 
     async def dispose(self) -> None:
