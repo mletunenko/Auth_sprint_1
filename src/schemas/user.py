@@ -3,15 +3,16 @@ from datetime import datetime
 from pydantic import BaseModel, EmailStr, UUID4
 
 
-class UserBase(BaseModel):
+class UserBaseOut(BaseModel):
     login: str
     email: EmailStr
     first_name: str | None = None
     last_name: str | None = None
 
-class UserCreate(UserBase):
+class UserCreateIn(UserBaseOut):
     password: str
 
-class UserRead(UserBase):
+class UserReadOut(UserBaseOut):
     id: UUID4
     created_at: datetime
+
