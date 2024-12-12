@@ -1,6 +1,7 @@
 import uuid
 
 from sqlalchemy import MetaData
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr
 from sqlalchemy.testing.schema import mapped_column
 
@@ -20,7 +21,8 @@ class Base(DeclarativeBase):
         return f"{camel_case_to_snake_case(cls.__name__)}s"
 
 
-    id: Mapped[int] = mapped_column(
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
         primary_key=True,
         default=uuid.uuid4,
         unique=True,
