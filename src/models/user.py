@@ -1,5 +1,6 @@
 import datetime
 
+from sqlalchemy import TIMESTAMP
 from sqlalchemy.orm import mapped_column, Mapped
 
 from utils.password import generate_password_hash, check_password_hash
@@ -11,7 +12,9 @@ class User(Base):
     email: Mapped[str] = mapped_column(nullable=False)
     first_name: Mapped[str] = mapped_column(nullable=True)
     last_name: Mapped[str] = mapped_column(nullable=True)
-    created_at: Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now(datetime.UTC))
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        TIMESTAMP(timezone=True),
+        default=datetime.datetime.now(datetime.timezone.utc))
 
     def __init__(self, login: str, email: str, password:str, first_name: str, last_name: str) -> None:
         self.login = login
