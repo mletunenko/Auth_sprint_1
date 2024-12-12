@@ -11,5 +11,4 @@ async def create_user(
     user = User(**user_create.model_dump())
     session.add(user)
     await session.commit()
-    await session.refresh(user)
     return user
