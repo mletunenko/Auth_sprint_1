@@ -8,7 +8,7 @@ from services.users import create_user as services_create_user
 
 router = APIRouter()
 
-@router.post("/register/", response_model=UserBaseOut)
+@router.post("/register", response_model=UserBaseOut)
 async def create_user(
         user_create: UserCreateIn,
         session: AsyncSession = Depends(pg_helper.session_getter),

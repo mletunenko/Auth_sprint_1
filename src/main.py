@@ -1,9 +1,10 @@
 from contextlib import asynccontextmanager
+from sys import prefix
 
 import uvicorn
 from fastapi import FastAPI
 
-from api import router as api_router
+from api.auth import router as auth_router
 from core.config import settings
 from db.postgres import pg_helper
 
@@ -20,7 +21,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 app.include_router(
-    api_router,
+    auth_router,
+    prefix="/auth"
 )
 
 if __name__ == "__main__":
