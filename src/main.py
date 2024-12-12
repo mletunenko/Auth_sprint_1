@@ -10,9 +10,9 @@ from db.postgres import pg_helper
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # старт
+    # startup
     yield
-    # стоп
+    # shutdown
     await pg_helper.dispose()
 
 
