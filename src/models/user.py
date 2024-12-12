@@ -10,8 +10,8 @@ class User(Base):
     login: Mapped[str] = mapped_column(unique=True, nullable=False)
     password: Mapped[bytes] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False)
-    first_name: Mapped[str] = mapped_column(nullable=True)
-    last_name: Mapped[str] = mapped_column(nullable=True)
+    first_name: Mapped[str] = mapped_column(nullable=False, default="")
+    last_name: Mapped[str] = mapped_column(nullable=False, default="")
     created_at: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP(timezone=True),
         default=datetime.datetime.now(datetime.timezone.utc))
