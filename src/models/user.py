@@ -1,14 +1,14 @@
 import datetime
 
+from passlib.handlers.pbkdf2 import pbkdf2_sha256
 from sqlalchemy import TIMESTAMP
 from sqlalchemy.orm import mapped_column, Mapped
 
-from utils.password import generate_password_hash, check_password_hash
 from .base import Base
 
 class User(Base):
     login: Mapped[str] = mapped_column(unique=True, nullable=False)
-    password: Mapped[bytes] = mapped_column(nullable=False)
+    password: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False)
     first_name: Mapped[str] = mapped_column(nullable=False, default="")
     last_name: Mapped[str] = mapped_column(nullable=False, default="")
@@ -16,15 +16,11 @@ class User(Base):
         TIMESTAMP(timezone=True),
         default=datetime.datetime.now(datetime.timezone.utc))
 
-    def __init__(self, login: str, email: str, password:str, first_name: str, last_name: str) -> None:
-        self.login = login
-        self.email = email
-        self.password = self.password = generate_password_hash(password)
-        self.first_name = first_name
-        self.last_name = last_name
+    def set_password(self, raw_password):
+        self.password = pbkdf2_sha256.hash(raw_password)
 
-    def check_password(self, password: str) -> bool:
-        return check_password_hash(password, self.password)
+    def check_password(self, raw_password: str) -> bool:
+        return pbkdf2_sha256.verify(self.password, raw_password)
 
     def __repr__(self) -> str:
         return f'<User {self.login}>'
