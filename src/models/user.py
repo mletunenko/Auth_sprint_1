@@ -8,7 +8,6 @@ from .base import Base
 
 
 class User(Base):
-    login: Mapped[str] = mapped_column(unique=True, nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False)
     first_name: Mapped[str] = mapped_column(nullable=False, default="")
@@ -24,4 +23,4 @@ class User(Base):
         return pbkdf2_sha256.verify(self.password, raw_password)
 
     def __repr__(self) -> str:
-        return f"<User {self.login}>"
+        return f"<User {self.email}>"
