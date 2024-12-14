@@ -9,10 +9,10 @@ class UserBaseOut(BaseModel):
     first_name: str | None = None
     last_name: str | None = None
 
-class UserCreateIn(UserBaseOut):
+class UserIn(UserBaseOut):
     password: str
 
-class UserReadOut(UserBaseOut):
+class UserOut(UserBaseOut):
     id: UUID4
     created_at: datetime
 

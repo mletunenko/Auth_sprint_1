@@ -6,14 +6,14 @@ from sqlalchemy.future import select
 
 from db.postgres import pg_helper
 from models import User
-from schemas.user import UserBaseOut, UserCreateIn
+from schemas.user import UserBaseOut, UserIn
 from services.users import create_user as services_create_user
 
 router = APIRouter()
 
 @router.post("/register", response_model=UserBaseOut)
 async def create_user(
-        user_create: UserCreateIn,
+        user_create: UserIn,
         session: AsyncSession = Depends(pg_helper.session_getter),
 ) -> UserBaseOut:
     result = await session.execute(select(User).where(or_(User.login == user_create.login,User.email == user_create.email)))
