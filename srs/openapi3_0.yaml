@@ -150,6 +150,24 @@ paths:
         '401':
           description: Неавторизованный запрос
 
+  /auth/me:
+    get:
+      summary: Личный кабинет
+      responses:
+        '200':
+          description: Личный кабинет пользователя
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  password:
+                    type: string
+        '401':
+          description: Неавторизованный запрос
+
   /roles:
     get:
       summary: Получение списка ролей

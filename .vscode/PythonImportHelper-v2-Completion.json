@@ -1,0 +1,853 @@
+[
+    {
+        "label": "Sequence",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Union",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Sequence",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Union",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Sequence",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Union",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncGenerator",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncGenerator",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "sqlalchemy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "pool",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "MetaData",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "TIMESTAMP",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "context",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "postgresql",
+        "importPath": "sqlalchemy.dialects",
+        "description": "sqlalchemy.dialects",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.dialects",
+        "documentation": {}
+    },
+    {
+        "label": "asyncio",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "asyncio",
+        "description": "asyncio",
+        "detail": "asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "fileConfig",
+        "importPath": "logging.config",
+        "description": "logging.config",
+        "isExtraImport": true,
+        "detail": "logging.config",
+        "documentation": {}
+    },
+    {
+        "label": "Connection",
+        "importPath": "sqlalchemy.engine",
+        "description": "sqlalchemy.engine",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.engine",
+        "documentation": {}
+    },
+    {
+        "label": "async_engine_from_config",
+        "importPath": "sqlalchemy.ext.asyncio",
+        "description": "sqlalchemy.ext.asyncio",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.ext.asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncSession",
+        "importPath": "sqlalchemy.ext.asyncio",
+        "description": "sqlalchemy.ext.asyncio",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.ext.asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncEngine",
+        "importPath": "sqlalchemy.ext.asyncio",
+        "description": "sqlalchemy.ext.asyncio",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.ext.asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncSession",
+        "importPath": "sqlalchemy.ext.asyncio",
+        "description": "sqlalchemy.ext.asyncio",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.ext.asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "async_sessionmaker",
+        "importPath": "sqlalchemy.ext.asyncio",
+        "description": "sqlalchemy.ext.asyncio",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.ext.asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "create_async_engine",
+        "importPath": "sqlalchemy.ext.asyncio",
+        "description": "sqlalchemy.ext.asyncio",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.ext.asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncSession",
+        "importPath": "sqlalchemy.ext.asyncio",
+        "description": "sqlalchemy.ext.asyncio",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.ext.asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncSession",
+        "importPath": "sqlalchemy.ext.asyncio",
+        "description": "sqlalchemy.ext.asyncio",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.ext.asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "core.config",
+        "description": "core.config",
+        "isExtraImport": true,
+        "detail": "core.config",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "core.config",
+        "description": "core.config",
+        "isExtraImport": true,
+        "detail": "core.config",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "core.config",
+        "description": "core.config",
+        "isExtraImport": true,
+        "detail": "core.config",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "core.config",
+        "description": "core.config",
+        "isExtraImport": true,
+        "detail": "core.config",
+        "documentation": {}
+    },
+    {
+        "label": "Base",
+        "importPath": "models",
+        "description": "models",
+        "isExtraImport": true,
+        "detail": "models",
+        "documentation": {}
+    },
+    {
+        "label": "User",
+        "importPath": "models",
+        "description": "models",
+        "isExtraImport": true,
+        "detail": "models",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Depends",
+        "importPath": "fastapi.params",
+        "description": "fastapi.params",
+        "isExtraImport": true,
+        "detail": "fastapi.params",
+        "documentation": {}
+    },
+    {
+        "label": "pg_helper",
+        "importPath": "db.postgres",
+        "description": "db.postgres",
+        "isExtraImport": true,
+        "detail": "db.postgres",
+        "documentation": {}
+    },
+    {
+        "label": "pg_helper",
+        "importPath": "db.postgres",
+        "description": "db.postgres",
+        "isExtraImport": true,
+        "detail": "db.postgres",
+        "documentation": {}
+    },
+    {
+        "label": "UserBaseOut",
+        "importPath": "schemas.user",
+        "description": "schemas.user",
+        "isExtraImport": true,
+        "detail": "schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "UserCreateIn",
+        "importPath": "schemas.user",
+        "description": "schemas.user",
+        "isExtraImport": true,
+        "detail": "schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "UserAccountOut",
+        "importPath": "schemas.user",
+        "description": "schemas.user",
+        "isExtraImport": true,
+        "detail": "schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "UserAccountOut",
+        "importPath": "schemas.user",
+        "description": "schemas.user",
+        "isExtraImport": true,
+        "detail": "schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "UserCreateIn",
+        "importPath": "schemas.user",
+        "description": "schemas.user",
+        "isExtraImport": true,
+        "detail": "schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "create_user",
+        "importPath": "services.users",
+        "description": "services.users",
+        "isExtraImport": true,
+        "detail": "services.users",
+        "documentation": {}
+    },
+    {
+        "label": "account_page",
+        "importPath": "services.users",
+        "description": "services.users",
+        "isExtraImport": true,
+        "detail": "services.users",
+        "documentation": {}
+    },
+    {
+        "label": "UUID4",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "PostgresDsn",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "UUID4",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "EmailStr",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "UUID4",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "config",
+        "importPath": "logging",
+        "description": "logging",
+        "isExtraImport": true,
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "BaseSettings",
+        "importPath": "pydantic_settings",
+        "description": "pydantic_settings",
+        "isExtraImport": true,
+        "detail": "pydantic_settings",
+        "documentation": {}
+    },
+    {
+        "label": "SettingsConfigDict",
+        "importPath": "pydantic_settings",
+        "description": "pydantic_settings",
+        "isExtraImport": true,
+        "detail": "pydantic_settings",
+        "documentation": {}
+    },
+    {
+        "label": "LOGGING",
+        "importPath": "core.logger",
+        "description": "core.logger",
+        "isExtraImport": true,
+        "detail": "core.logger",
+        "documentation": {}
+    },
+    {
+        "label": "uuid",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uuid",
+        "description": "uuid",
+        "detail": "uuid",
+        "documentation": {}
+    },
+    {
+        "label": "UUID",
+        "importPath": "sqlalchemy.dialects.postgresql",
+        "description": "sqlalchemy.dialects.postgresql",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.dialects.postgresql",
+        "documentation": {}
+    },
+    {
+        "label": "DeclarativeBase",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "Mapped",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "declared_attr",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "Mapped",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "mapped_column",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "mapped_column",
+        "importPath": "sqlalchemy.testing.schema",
+        "description": "sqlalchemy.testing.schema",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.testing.schema",
+        "documentation": {}
+    },
+    {
+        "label": "camel_case_to_snake_case",
+        "importPath": "utils.case_converter",
+        "description": "utils.case_converter",
+        "isExtraImport": true,
+        "detail": "utils.case_converter",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "datetime",
+        "description": "datetime",
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "pbkdf2_sha256",
+        "importPath": "passlib.handlers.pbkdf2",
+        "description": "passlib.handlers.pbkdf2",
+        "isExtraImport": true,
+        "detail": "passlib.handlers.pbkdf2",
+        "documentation": {}
+    },
+    {
+        "label": "asynccontextmanager",
+        "importPath": "contextlib",
+        "description": "contextlib",
+        "isExtraImport": true,
+        "detail": "contextlib",
+        "documentation": {}
+    },
+    {
+        "label": "uvicorn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uvicorn",
+        "description": "uvicorn",
+        "detail": "uvicorn",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "importPath": "api.auth",
+        "description": "api.auth",
+        "isExtraImport": true,
+        "detail": "api.auth",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "src.alembic.versions.2024_12_12_1232-557756755976_создание_таблицы_users",
+        "description": "src.alembic.versions.2024_12_12_1232-557756755976_создание_таблицы_users",
+        "peekOfCode": "def upgrade() -> None:\n    op.create_table(\n        \"users\",\n        sa.Column(\"id\", sa.UUID(), nullable=False),\n        sa.Column(\"login\", sa.String(), nullable=False),\n        sa.Column(\"password\", sa.LargeBinary(), nullable=False),\n        sa.Column(\"email\", sa.String(), nullable=False),\n        sa.Column(\"first_name\", sa.String(), nullable=True),\n        sa.Column(\"last_name\", sa.String(), nullable=True),\n        sa.Column(\"created_at\", sa.TIMESTAMP(timezone=True), nullable=False),",
+        "detail": "src.alembic.versions.2024_12_12_1232-557756755976_создание_таблицы_users",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "src.alembic.versions.2024_12_12_1232-557756755976_создание_таблицы_users",
+        "description": "src.alembic.versions.2024_12_12_1232-557756755976_создание_таблицы_users",
+        "peekOfCode": "def downgrade() -> None:\n    op.drop_table(\"users\")",
+        "detail": "src.alembic.versions.2024_12_12_1232-557756755976_создание_таблицы_users",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "src.alembic.versions.2024_12_12_1745-da5404445050_изменение_поля_password",
+        "description": "src.alembic.versions.2024_12_12_1745-da5404445050_изменение_поля_password",
+        "peekOfCode": "def upgrade() -> None:\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.alter_column(\n        \"users\",\n        \"password\",\n        existing_type=postgresql.BYTEA(),\n        type_=sa.String(),\n        existing_nullable=False,\n    )\n    op.alter_column(",
+        "detail": "src.alembic.versions.2024_12_12_1745-da5404445050_изменение_поля_password",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "src.alembic.versions.2024_12_12_1745-da5404445050_изменение_поля_password",
+        "description": "src.alembic.versions.2024_12_12_1745-da5404445050_изменение_поля_password",
+        "peekOfCode": "def downgrade() -> None:\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.drop_constraint(op.f(\"uq_users_id\"), \"users\", type_=\"unique\")\n    op.alter_column(\n        \"users\", \"last_name\", existing_type=sa.VARCHAR(), nullable=True\n    )\n    op.alter_column(\n        \"users\", \"first_name\", existing_type=sa.VARCHAR(), nullable=True\n    )\n    op.alter_column(",
+        "detail": "src.alembic.versions.2024_12_12_1745-da5404445050_изменение_поля_password",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "src.alembic.versions.2024_12_14_1507-f3a928b44635_удаление_user_login",
+        "description": "src.alembic.versions.2024_12_14_1507-f3a928b44635_удаление_user_login",
+        "peekOfCode": "def upgrade() -> None:\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.drop_constraint('uq_users_login', 'users', type_='unique')\n    op.drop_column('users', 'login')\n    # ### end Alembic commands ###\ndef downgrade() -> None:\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.add_column('users', sa.Column('login', sa.VARCHAR(), autoincrement=False, nullable=False))\n    op.create_unique_constraint('uq_users_login', 'users', ['login'])\n    # ### end Alembic commands ###",
+        "detail": "src.alembic.versions.2024_12_14_1507-f3a928b44635_удаление_user_login",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "src.alembic.versions.2024_12_14_1507-f3a928b44635_удаление_user_login",
+        "description": "src.alembic.versions.2024_12_14_1507-f3a928b44635_удаление_user_login",
+        "peekOfCode": "def downgrade() -> None:\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.add_column('users', sa.Column('login', sa.VARCHAR(), autoincrement=False, nullable=False))\n    op.create_unique_constraint('uq_users_login', 'users', ['login'])\n    # ### end Alembic commands ###",
+        "detail": "src.alembic.versions.2024_12_14_1507-f3a928b44635_удаление_user_login",
+        "documentation": {}
+    },
+    {
+        "label": "run_migrations_offline",
+        "kind": 2,
+        "importPath": "src.alembic.env",
+        "description": "src.alembic.env",
+        "peekOfCode": "def run_migrations_offline() -> None:\n    \"\"\"Run migrations in 'offline' mode.\n    This configures the context with just a URL\n    and not an Engine, though an Engine is acceptable\n    here as well.  By skipping the Engine creation\n    we don't even need a DBAPI to be available.\n    Calls to context.execute() here emit the given string to the\n    script output.\n    \"\"\"\n    url = config.get_main_option(\"sqlalchemy.url\")",
+        "detail": "src.alembic.env",
+        "documentation": {}
+    },
+    {
+        "label": "do_run_migrations",
+        "kind": 2,
+        "importPath": "src.alembic.env",
+        "description": "src.alembic.env",
+        "peekOfCode": "def do_run_migrations(connection: Connection) -> None:\n    context.configure(connection=connection, target_metadata=target_metadata)\n    with context.begin_transaction():\n        context.run_migrations()\nasync def run_async_migrations() -> None:\n    \"\"\"In this scenario we need to create an Engine\n    and associate a connection with the context.\n    \"\"\"\n    connectable = async_engine_from_config(\n        config.get_section(config.config_ini_section, {}),",
+        "detail": "src.alembic.env",
+        "documentation": {}
+    },
+    {
+        "label": "run_migrations_online",
+        "kind": 2,
+        "importPath": "src.alembic.env",
+        "description": "src.alembic.env",
+        "peekOfCode": "def run_migrations_online() -> None:\n    \"\"\"Run migrations in 'online' mode.\"\"\"\n    asyncio.run(run_async_migrations())\nif context.is_offline_mode():\n    run_migrations_offline()\nelse:\n    run_migrations_online()",
+        "detail": "src.alembic.env",
+        "documentation": {}
+    },
+    {
+        "label": "config",
+        "kind": 5,
+        "importPath": "src.alembic.env",
+        "description": "src.alembic.env",
+        "peekOfCode": "config = context.config\n# Interpret the config file for Python logging.\n# This line sets up loggers basically.\nif config.config_file_name is not None:\n    fileConfig(config.config_file_name)\n# add your model's MetaData object here\n# for 'autogenerate' support\n# from myapp import mymodel\n# target_metadata = mymodel.Base.metadata\ntarget_metadata = Base.metadata",
+        "detail": "src.alembic.env",
+        "documentation": {}
+    },
+    {
+        "label": "target_metadata",
+        "kind": 5,
+        "importPath": "src.alembic.env",
+        "description": "src.alembic.env",
+        "peekOfCode": "target_metadata = Base.metadata\n# other values from the config, defined by the needs of env.py,\n# can be acquired:\n# my_important_option = config.get_main_option(\"my_important_option\")\n# ... etc.\nconfig.set_main_option(\"sqlalchemy.url\", str(settings.db.url))\ndef run_migrations_offline() -> None:\n    \"\"\"Run migrations in 'offline' mode.\n    This configures the context with just a URL\n    and not an Engine, though an Engine is acceptable",
+        "detail": "src.alembic.env",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "src.api.auth",
+        "description": "src.api.auth",
+        "peekOfCode": "router = APIRouter()\n@router.post(\"/register\", response_model=UserBaseOut)\nasync def create_user(\n        user_create: UserCreateIn,\n        session: AsyncSession = Depends(pg_helper.session_getter),\n) -> UserBaseOut:\n    user = await services_create_user(\n        user_create=user_create,\n        session=session,\n    )",
+        "detail": "src.api.auth",
+        "documentation": {}
+    },
+    {
+        "label": "RunConfig",
+        "kind": 6,
+        "importPath": "src.core.config",
+        "description": "src.core.config",
+        "peekOfCode": "class RunConfig(BaseModel):\n    host: str = \"0.0.0.0\"\n    port: int = 8000\nclass DatabaseConfig(BaseModel):\n    url: PostgresDsn\n    echo: bool = False\n    echo_pool: bool = False\n    pool_size: int = 50\n    max_overflow: int = 10\n    naming_conventions: dict[str, str] = {",
+        "detail": "src.core.config",
+        "documentation": {}
+    },
+    {
+        "label": "DatabaseConfig",
+        "kind": 6,
+        "importPath": "src.core.config",
+        "description": "src.core.config",
+        "peekOfCode": "class DatabaseConfig(BaseModel):\n    url: PostgresDsn\n    echo: bool = False\n    echo_pool: bool = False\n    pool_size: int = 50\n    max_overflow: int = 10\n    naming_conventions: dict[str, str] = {\n        \"ix\": \"ix_%(column_0_label)s\",\n        \"uq\": \"uq_%(table_name)s_%(column_0_N_name)s\",\n        \"ck\": \"ck_%(table_name)s_%(constraint_name)s\",",
+        "detail": "src.core.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "kind": 6,
+        "importPath": "src.core.config",
+        "description": "src.core.config",
+        "peekOfCode": "class Settings(BaseSettings):\n    model_config = SettingsConfigDict(\n        env_file=(\".env.example\", \".env\"),\n        case_sensitive=False,\n        env_nested_delimiter=\"__\",\n        env_prefix=\"APP_CONFIG__\",\n    )\n    run: RunConfig = RunConfig()\n    db: DatabaseConfig\nsettings = Settings()",
+        "detail": "src.core.config",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "kind": 5,
+        "importPath": "src.core.config",
+        "description": "src.core.config",
+        "peekOfCode": "settings = Settings()",
+        "detail": "src.core.config",
+        "documentation": {}
+    },
+    {
+        "label": "LOG_FORMAT",
+        "kind": 5,
+        "importPath": "src.core.logger",
+        "description": "src.core.logger",
+        "peekOfCode": "LOG_FORMAT = \"%(asctime)s - %(name)s - %(levelname)s - %(message)s\"\nLOG_DEFAULT_HANDLERS = [\"console\", ]\n# В логгере настраивается логгирование uvicorn-сервера.\n# Про логирование в Python можно прочитать в документации\n# https://docs.python.org/3/howto/logging.html\n# https://docs.python.org/3/howto/logging-cookbook.html\nLOGGING = {\n    \"version\": 1,\n    \"disable_existing_loggers\": False,\n    \"formatters\": {",
+        "detail": "src.core.logger",
+        "documentation": {}
+    },
+    {
+        "label": "LOG_DEFAULT_HANDLERS",
+        "kind": 5,
+        "importPath": "src.core.logger",
+        "description": "src.core.logger",
+        "peekOfCode": "LOG_DEFAULT_HANDLERS = [\"console\", ]\n# В логгере настраивается логгирование uvicorn-сервера.\n# Про логирование в Python можно прочитать в документации\n# https://docs.python.org/3/howto/logging.html\n# https://docs.python.org/3/howto/logging-cookbook.html\nLOGGING = {\n    \"version\": 1,\n    \"disable_existing_loggers\": False,\n    \"formatters\": {\n        \"verbose\": {",
+        "detail": "src.core.logger",
+        "documentation": {}
+    },
+    {
+        "label": "LOGGING",
+        "kind": 5,
+        "importPath": "src.core.logger",
+        "description": "src.core.logger",
+        "peekOfCode": "LOGGING = {\n    \"version\": 1,\n    \"disable_existing_loggers\": False,\n    \"formatters\": {\n        \"verbose\": {\n            \"format\": LOG_FORMAT\n        },\n        \"default\": {\n            \"()\": \"uvicorn.logging.DefaultFormatter\",\n            \"fmt\": \"%(levelprefix)s %(message)s\",",
+        "detail": "src.core.logger",
+        "documentation": {}
+    },
+    {
+        "label": "PostgresHelper",
+        "kind": 6,
+        "importPath": "src.db.postgres",
+        "description": "src.db.postgres",
+        "peekOfCode": "class PostgresHelper:\n    def __init__(\n        self,\n        url: str,\n        echo: bool = False,\n        echo_pool: bool = False,\n        pool_size: int = 5,\n        max_overflow: int = 10,\n    ) -> None:\n        self.engine: AsyncEngine = create_async_engine(",
+        "detail": "src.db.postgres",
+        "documentation": {}
+    },
+    {
+        "label": "pg_helper",
+        "kind": 5,
+        "importPath": "src.db.postgres",
+        "description": "src.db.postgres",
+        "peekOfCode": "pg_helper = PostgresHelper(\n    url=str(settings.db.url),\n    echo=settings.db.echo,\n    echo_pool=settings.db.echo_pool,\n    pool_size=settings.db.pool_size,\n    max_overflow=settings.db.max_overflow,\n)",
+        "detail": "src.db.postgres",
+        "documentation": {}
+    },
+    {
+        "label": "Base",
+        "kind": 6,
+        "importPath": "src.models.base",
+        "description": "src.models.base",
+        "peekOfCode": "class Base(DeclarativeBase):\n    __abstract__ = True\n    metadata = MetaData(\n        naming_convention=settings.db.naming_conventions\n    )\n    @declared_attr.directive\n    def __tablename__(cls) -> str:\n        return f\"{camel_case_to_snake_case(cls.__name__)}s\"\n    id: Mapped[uuid.UUID] = mapped_column(\n        UUID(as_uuid=True),",
+        "detail": "src.models.base",
+        "documentation": {}
+    },
+    {
+        "label": "User",
+        "kind": 6,
+        "importPath": "src.models.user",
+        "description": "src.models.user",
+        "peekOfCode": "class User(Base):\n    password: Mapped[str] = mapped_column(nullable=False)\n    email: Mapped[str] = mapped_column(nullable=False)\n    first_name: Mapped[str] = mapped_column(nullable=False, default=\"\")\n    last_name: Mapped[str] = mapped_column(nullable=False, default=\"\")\n    created_at: Mapped[datetime.datetime] = mapped_column(\n        TIMESTAMP(timezone=True),\n        default=datetime.datetime.now(datetime.timezone.utc))\n    def set_password(self, raw_password: str) -> None:\n        self.password = pbkdf2_sha256.hash(raw_password)",
+        "detail": "src.models.user",
+        "documentation": {}
+    },
+    {
+        "label": "UserBaseOut",
+        "kind": 6,
+        "importPath": "src.schemas.user",
+        "description": "src.schemas.user",
+        "peekOfCode": "class UserBaseOut(BaseModel):\n    email: EmailStr\nclass UserFullOut(UserBaseOut):\n    first_name: str | None = None\n    last_name: str | None = None\nclass UserCreateIn(UserBaseOut):\n    password: str\nclass UserReadOut(UserBaseOut):\n    id: UUID4\n    created_at: datetime",
+        "detail": "src.schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "UserFullOut",
+        "kind": 6,
+        "importPath": "src.schemas.user",
+        "description": "src.schemas.user",
+        "peekOfCode": "class UserFullOut(UserBaseOut):\n    first_name: str | None = None\n    last_name: str | None = None\nclass UserCreateIn(UserBaseOut):\n    password: str\nclass UserReadOut(UserBaseOut):\n    id: UUID4\n    created_at: datetime\nclass UserAccountOut(UserBaseOut, UserCreateIn):\n    pass",
+        "detail": "src.schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "UserCreateIn",
+        "kind": 6,
+        "importPath": "src.schemas.user",
+        "description": "src.schemas.user",
+        "peekOfCode": "class UserCreateIn(UserBaseOut):\n    password: str\nclass UserReadOut(UserBaseOut):\n    id: UUID4\n    created_at: datetime\nclass UserAccountOut(UserBaseOut, UserCreateIn):\n    pass",
+        "detail": "src.schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "UserReadOut",
+        "kind": 6,
+        "importPath": "src.schemas.user",
+        "description": "src.schemas.user",
+        "peekOfCode": "class UserReadOut(UserBaseOut):\n    id: UUID4\n    created_at: datetime\nclass UserAccountOut(UserBaseOut, UserCreateIn):\n    pass",
+        "detail": "src.schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "UserAccountOut",
+        "kind": 6,
+        "importPath": "src.schemas.user",
+        "description": "src.schemas.user",
+        "peekOfCode": "class UserAccountOut(UserBaseOut, UserCreateIn):\n    pass",
+        "detail": "src.schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "camel_case_to_snake_case",
+        "kind": 2,
+        "importPath": "src.utils.case_converter",
+        "description": "src.utils.case_converter",
+        "peekOfCode": "def camel_case_to_snake_case(input_str: str) -> str:\n    \"\"\"\n    >>> camel_case_to_snake_case(\"SomeSDK\")\n    'some_sdk'\n    >>> camel_case_to_snake_case(\"RServoDrive\")\n    'r_servo_drive'\n    >>> camel_case_to_snake_case(\"SDKDemo\")\n    'sdk_demo'\n    \"\"\"\n    chars = []",
+        "detail": "src.utils.case_converter",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "src.main",
+        "description": "src.main",
+        "peekOfCode": "app = FastAPI(\n    lifespan=lifespan,\n)\napp.include_router(\n    auth_router,\n    prefix=\"/auth\"\n)\nif __name__ == \"__main__\":\n    uvicorn.run(\n        \"main:app\",",
+        "detail": "src.main",
+        "documentation": {}
+    }
+]
