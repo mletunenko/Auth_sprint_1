@@ -1,3 +1,6 @@
+volumes:
+  pg_data:
+
 services:
 
   postgres:
@@ -8,3 +11,11 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
+
+  alembic-migrations:
+    build: .
+    environment:
+      APP_CONFIG__DB__URL: postgresql+asyncpg://user:password@postgres:5432/auth
+    restart: "no"
+    command: >
+      alembic upgrade head
