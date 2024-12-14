@@ -1,9 +1,12 @@
 from logging import config as logging_config
+from pathlib import Path
 
 from pydantic import BaseModel, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from core.logger import LOGGING
+
+BASE_DIR = Path(__file__).parent.parent
 
 # Применяем настройки логирования
 logging_config.dictConfig(LOGGING)
@@ -30,6 +33,15 @@ class DatabaseConfig(BaseModel):
     }
 
 
+
+class AuthJWT(BaseModel):
+    private_key_path: Path = BASE_DIR / "certs" / "jwt-private.pem"
+    public_key_path: Path = BASE_DIR / "certs" / "jwt-public.pem"
+    algorithm: str = "RS256"
+    # access_token_expire_minutes: int = 15
+    access_token_expire_minutes: int = 3
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env.example", ".env"),
@@ -39,6 +51,7 @@ class Settings(BaseSettings):
     )
     run: RunConfig = RunConfig()
     db: DatabaseConfig
+    auth_jwt: AuthJWT = AuthJWT()
 
 
 settings = Settings()
