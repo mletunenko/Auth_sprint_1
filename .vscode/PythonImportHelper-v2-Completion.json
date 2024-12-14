@@ -97,6 +97,14 @@
         "documentation": {}
     },
     {
+        "label": "select",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
         "label": "op",
         "importPath": "alembic",
         "description": "alembic",
@@ -163,6 +171,14 @@
     },
     {
         "label": "async_engine_from_config",
+        "importPath": "sqlalchemy.ext.asyncio",
+        "description": "sqlalchemy.ext.asyncio",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.ext.asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncSession",
         "importPath": "sqlalchemy.ext.asyncio",
         "description": "sqlalchemy.ext.asyncio",
         "isExtraImport": true,
@@ -274,6 +290,14 @@
         "documentation": {}
     },
     {
+        "label": "User",
+        "importPath": "models",
+        "description": "models",
+        "isExtraImport": true,
+        "detail": "models",
+        "documentation": {}
+    },
+    {
         "label": "APIRouter",
         "importPath": "fastapi",
         "description": "fastapi",
@@ -282,7 +306,47 @@
         "documentation": {}
     },
     {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Depends",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
         "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Request",
         "importPath": "fastapi",
         "description": "fastapi",
         "isExtraImport": true,
@@ -314,6 +378,46 @@
         "documentation": {}
     },
     {
+        "label": "pg_helper",
+        "importPath": "db.postgres",
+        "description": "db.postgres",
+        "isExtraImport": true,
+        "detail": "db.postgres",
+        "documentation": {}
+    },
+    {
+        "label": "AuthJWT",
+        "importPath": "async_fastapi_jwt_auth",
+        "description": "async_fastapi_jwt_auth",
+        "isExtraImport": true,
+        "detail": "async_fastapi_jwt_auth",
+        "documentation": {}
+    },
+    {
+        "label": "AuthJWT",
+        "importPath": "async_fastapi_jwt_auth",
+        "description": "async_fastapi_jwt_auth",
+        "isExtraImport": true,
+        "detail": "async_fastapi_jwt_auth",
+        "documentation": {}
+    },
+    {
+        "label": "auth_dep",
+        "importPath": "api.basic",
+        "description": "api.basic",
+        "isExtraImport": true,
+        "detail": "api.basic",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "importPath": "api.basic",
+        "description": "api.basic",
+        "isExtraImport": true,
+        "detail": "api.basic",
+        "documentation": {}
+    },
+    {
         "label": "UserBaseOut",
         "importPath": "schemas.user",
         "description": "schemas.user",
@@ -338,7 +442,31 @@
         "documentation": {}
     },
     {
+        "label": "UserAccountLogin",
+        "importPath": "schemas.user",
+        "description": "schemas.user",
+        "isExtraImport": true,
+        "detail": "schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "LoginResponse",
+        "importPath": "schemas.user",
+        "description": "schemas.user",
+        "isExtraImport": true,
+        "detail": "schemas.user",
+        "documentation": {}
+    },
+    {
         "label": "UserAccountOut",
+        "importPath": "schemas.user",
+        "description": "schemas.user",
+        "isExtraImport": true,
+        "detail": "schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "UserIdOut",
         "importPath": "schemas.user",
         "description": "schemas.user",
         "isExtraImport": true,
@@ -363,14 +491,22 @@
     },
     {
         "label": "account_page",
-        "importPath": "services.users",
-        "description": "services.users",
+        "importPath": "services.account",
+        "description": "services.account",
         "isExtraImport": true,
-        "detail": "services.users",
+        "detail": "services.account",
         "documentation": {}
     },
     {
-        "label": "UUID4",
+        "label": "get_current_user",
+        "importPath": "services.account",
+        "description": "services.account",
+        "isExtraImport": true,
+        "detail": "services.account",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
         "importPath": "pydantic",
         "description": "pydantic",
         "isExtraImport": true,
@@ -423,6 +559,22 @@
         "description": "pydantic",
         "isExtraImport": true,
         "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "EmailStr",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "AuthJWTBearer",
+        "importPath": "async_fastapi_jwt_auth.auth_jwt",
+        "description": "async_fastapi_jwt_auth.auth_jwt",
+        "isExtraImport": true,
+        "detail": "async_fastapi_jwt_auth.auth_jwt",
         "documentation": {}
     },
     {
@@ -573,6 +725,22 @@
         "documentation": {}
     },
     {
+        "label": "JSONResponse",
+        "importPath": "fastapi.responses",
+        "description": "fastapi.responses",
+        "isExtraImport": true,
+        "detail": "fastapi.responses",
+        "documentation": {}
+    },
+    {
+        "label": "AuthJWTException",
+        "importPath": "async_fastapi_jwt_auth.exceptions",
+        "description": "async_fastapi_jwt_auth.exceptions",
+        "isExtraImport": true,
+        "detail": "async_fastapi_jwt_auth.exceptions",
+        "documentation": {}
+    },
+    {
         "label": "router",
         "importPath": "api.auth",
         "description": "api.auth",
@@ -689,6 +857,42 @@
         "documentation": {}
     },
     {
+        "label": "Settings",
+        "kind": 6,
+        "importPath": "src.api.basic",
+        "description": "src.api.basic",
+        "peekOfCode": "class Settings(BaseModel):\n    authjwt_secret_key: str = \"secret\"      # TODO to get secret key from .env\n# callback to get your configuration\n@AuthJWT.load_config\ndef get_config():\n    return Settings()\n# provide a method to create access tokens. The create_access_token()\n# function is used to actually generate the token to use authorization\n# later in endpoint protected\n@router.post(\"/login\", response_model=LoginResponse)",
+        "detail": "src.api.basic",
+        "documentation": {}
+    },
+    {
+        "label": "get_config",
+        "kind": 2,
+        "importPath": "src.api.basic",
+        "description": "src.api.basic",
+        "peekOfCode": "def get_config():\n    return Settings()\n# provide a method to create access tokens. The create_access_token()\n# function is used to actually generate the token to use authorization\n# later in endpoint protected\n@router.post(\"/login\", response_model=LoginResponse)\nasync def login(\n    user: UserAccountLogin,\n    authorize: AuthJWT = Depends(auth_dep),\n    session: AsyncSession = Depends(pg_helper.session_getter),",
+        "detail": "src.api.basic",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "src.api.basic",
+        "description": "src.api.basic",
+        "peekOfCode": "router = APIRouter()\nauth_dep = AuthJWTBearer()\n# in production, you can use Settings management\n# from pydantic to get secret key from .env\nclass Settings(BaseModel):\n    authjwt_secret_key: str = \"secret\"      # TODO to get secret key from .env\n# callback to get your configuration\n@AuthJWT.load_config\ndef get_config():\n    return Settings()",
+        "detail": "src.api.basic",
+        "documentation": {}
+    },
+    {
+        "label": "auth_dep",
+        "kind": 5,
+        "importPath": "src.api.basic",
+        "description": "src.api.basic",
+        "peekOfCode": "auth_dep = AuthJWTBearer()\n# in production, you can use Settings management\n# from pydantic to get secret key from .env\nclass Settings(BaseModel):\n    authjwt_secret_key: str = \"secret\"      # TODO to get secret key from .env\n# callback to get your configuration\n@AuthJWT.load_config\ndef get_config():\n    return Settings()\n# provide a method to create access tokens. The create_access_token()",
+        "detail": "src.api.basic",
+        "documentation": {}
+    },
+    {
         "label": "RunConfig",
         "kind": 6,
         "importPath": "src.core.config",
@@ -801,7 +1005,7 @@
         "kind": 6,
         "importPath": "src.schemas.user",
         "description": "src.schemas.user",
-        "peekOfCode": "class UserFullOut(UserBaseOut):\n    first_name: str | None = None\n    last_name: str | None = None\nclass UserCreateIn(UserBaseOut):\n    password: str\nclass UserReadOut(UserBaseOut):\n    id: UUID4\n    created_at: datetime\nclass UserAccountOut(UserBaseOut, UserCreateIn):\n    pass",
+        "peekOfCode": "class UserFullOut(UserBaseOut):\n    first_name: str | None = None\n    last_name: str | None = None\nclass UserCreateIn(UserBaseOut):\n    password: str\nclass UserReadOut(UserBaseOut):\n    id: UUID4\n    created_at: datetime\nclass UserAccountOut(BaseModel):\n    id: UUID4",
         "detail": "src.schemas.user",
         "documentation": {}
     },
@@ -810,7 +1014,7 @@
         "kind": 6,
         "importPath": "src.schemas.user",
         "description": "src.schemas.user",
-        "peekOfCode": "class UserCreateIn(UserBaseOut):\n    password: str\nclass UserReadOut(UserBaseOut):\n    id: UUID4\n    created_at: datetime\nclass UserAccountOut(UserBaseOut, UserCreateIn):\n    pass",
+        "peekOfCode": "class UserCreateIn(UserBaseOut):\n    password: str\nclass UserReadOut(UserBaseOut):\n    id: UUID4\n    created_at: datetime\nclass UserAccountOut(BaseModel):\n    id: UUID4\n    email: EmailStr\n    password: str = '***********'\nclass UserIdOut(BaseModel):",
         "detail": "src.schemas.user",
         "documentation": {}
     },
@@ -819,7 +1023,7 @@
         "kind": 6,
         "importPath": "src.schemas.user",
         "description": "src.schemas.user",
-        "peekOfCode": "class UserReadOut(UserBaseOut):\n    id: UUID4\n    created_at: datetime\nclass UserAccountOut(UserBaseOut, UserCreateIn):\n    pass",
+        "peekOfCode": "class UserReadOut(UserBaseOut):\n    id: UUID4\n    created_at: datetime\nclass UserAccountOut(BaseModel):\n    id: UUID4\n    email: EmailStr\n    password: str = '***********'\nclass UserIdOut(BaseModel):\n    id: UUID4\nclass UserAccountLogin(BaseModel):",
         "detail": "src.schemas.user",
         "documentation": {}
     },
@@ -828,7 +1032,43 @@
         "kind": 6,
         "importPath": "src.schemas.user",
         "description": "src.schemas.user",
-        "peekOfCode": "class UserAccountOut(UserBaseOut, UserCreateIn):\n    pass",
+        "peekOfCode": "class UserAccountOut(BaseModel):\n    id: UUID4\n    email: EmailStr\n    password: str = '***********'\nclass UserIdOut(BaseModel):\n    id: UUID4\nclass UserAccountLogin(BaseModel):\n    email: EmailStr\n    password: str\nclass LoginResponse(BaseModel):",
+        "detail": "src.schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "UserIdOut",
+        "kind": 6,
+        "importPath": "src.schemas.user",
+        "description": "src.schemas.user",
+        "peekOfCode": "class UserIdOut(BaseModel):\n    id: UUID4\nclass UserAccountLogin(BaseModel):\n    email: EmailStr\n    password: str\nclass LoginResponse(BaseModel):\n    access_token: str\n    token_type: str = \"bearer\"\nclass UserResponse(BaseModel):\n    id: UUID4",
+        "detail": "src.schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "UserAccountLogin",
+        "kind": 6,
+        "importPath": "src.schemas.user",
+        "description": "src.schemas.user",
+        "peekOfCode": "class UserAccountLogin(BaseModel):\n    email: EmailStr\n    password: str\nclass LoginResponse(BaseModel):\n    access_token: str\n    token_type: str = \"bearer\"\nclass UserResponse(BaseModel):\n    id: UUID4\n    class Config:\n        orm_mode = True",
+        "detail": "src.schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "LoginResponse",
+        "kind": 6,
+        "importPath": "src.schemas.user",
+        "description": "src.schemas.user",
+        "peekOfCode": "class LoginResponse(BaseModel):\n    access_token: str\n    token_type: str = \"bearer\"\nclass UserResponse(BaseModel):\n    id: UUID4\n    class Config:\n        orm_mode = True",
+        "detail": "src.schemas.user",
+        "documentation": {}
+    },
+    {
+        "label": "UserResponse",
+        "kind": 6,
+        "importPath": "src.schemas.user",
+        "description": "src.schemas.user",
+        "peekOfCode": "class UserResponse(BaseModel):\n    id: UUID4\n    class Config:\n        orm_mode = True",
         "detail": "src.schemas.user",
         "documentation": {}
     },
@@ -842,11 +1082,29 @@
         "documentation": {}
     },
     {
+        "label": "authjwt_exception_handler",
+        "kind": 2,
+        "importPath": "src.main",
+        "description": "src.main",
+        "peekOfCode": "def authjwt_exception_handler(request: Request, exc: AuthJWTException):\n    return JSONResponse(status_code=exc.status_code, content={\"detail\": exc.message})\nif __name__ == \"__main__\":\n    uvicorn.run(\n        \"main:app\",\n        host=settings.run.host,\n        port=settings.run.port,\n        reload=True,\n    )",
+        "detail": "src.main",
+        "documentation": {}
+    },
+    {
+        "label": "combined_router",
+        "kind": 5,
+        "importPath": "src.main",
+        "description": "src.main",
+        "peekOfCode": "combined_router = APIRouter()\ncombined_router.include_router(auth_router)\ncombined_router.include_router(basic_router)\n@asynccontextmanager\nasync def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:\n    # startup\n    yield\n    # shutdown\n    await pg_helper.dispose()\napp = FastAPI(",
+        "detail": "src.main",
+        "documentation": {}
+    },
+    {
         "label": "app",
         "kind": 5,
         "importPath": "src.main",
         "description": "src.main",
-        "peekOfCode": "app = FastAPI(\n    lifespan=lifespan,\n)\napp.include_router(\n    auth_router,\n    prefix=\"/auth\"\n)\nif __name__ == \"__main__\":\n    uvicorn.run(\n        \"main:app\",",
+        "peekOfCode": "app = FastAPI(\n    lifespan=lifespan,\n)\napp.include_router(\n    combined_router,\n    prefix=\"/auth\"\n)\n# Для модуля api/basic.py JWT аутентификации https://sijokun.github.io/async-fastapi-jwt-auth/usage/basic/\n@app.exception_handler(AuthJWTException)\ndef authjwt_exception_handler(request: Request, exc: AuthJWTException):",
         "detail": "src.main",
         "documentation": {}
     }
