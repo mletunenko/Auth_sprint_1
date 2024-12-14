@@ -14,6 +14,7 @@ from schemas.user import UserBaseOut, UserIn, UserLogin, UserOut
 from services.token import invalidate_token
 from services.users import create_user as services_create_user, account_page as service_account_page
 from services.users import validate_auth_user_login
+from services.account import account_page as service_account_page
 
 router = APIRouter()
 
@@ -37,7 +38,6 @@ async def create_user(
         session=session,
     )
     return user
-
 
 @router.post("/login", response_model=TokenInfo)
 async def login(

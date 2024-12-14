@@ -23,5 +23,28 @@ class UserLogin(BaseModel):
     password: str
 
 
-class UserAccountOut(UserBaseOut, UserIn):
-    pass
+class UserAccountOut(BaseModel):
+    id: UUID4
+    email: EmailStr
+    password: str = '***********'
+
+
+class UserIdOut(BaseModel):
+    id: UUID4
+
+
+class UserAccountLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class LoginResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+class UserResponse(BaseModel):
+    id: UUID4
+
+    class Config:
+        orm_mode = True
