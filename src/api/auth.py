@@ -10,9 +10,9 @@ from db.postgres import pg_helper
 from db.redis import get_redis_connection
 from models import User
 from schemas.token import TokenInfo
-from schemas.user import UserBaseOut, UserIn, UserLogin
+from schemas.user import UserBaseOut, UserIn, UserLogin, UserOut
 from services.token import invalidate_token
-from services.users import create_user as services_create_user
+from services.users import create_user as services_create_user, account_page as service_account_page
 from services.users import validate_auth_user_login
 
 router = APIRouter()
@@ -84,3 +84,15 @@ async def logout(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Token invalid"
         )
+
+# TODO не доделал
+@router.post("/me", response_model=UserOut)
+async def account_page(
+        user_id: UUID4,
+        session: AsyncSession = Depends(pg_helper.session_getter),
+) -> UserBaseOut:
+    user = await service_account_page(
+        user_id=user_id,
+        session=session,
+    )
+    return user

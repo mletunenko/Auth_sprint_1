@@ -5,6 +5,9 @@ from pydantic import UUID4, BaseModel, EmailStr
 
 class UserBaseOut(BaseModel):
     email: EmailStr
+
+
+class UserFullOut(UserBaseOut):
     first_name: str | None = None
     last_name: str | None = None
 
@@ -19,3 +22,6 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
+
+class UserAccountOut(UserBaseOut, UserIn):
+    pass

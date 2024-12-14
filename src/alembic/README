@@ -1,1 +1,8 @@
 Generic single-database configuration with an async dbapi.
+
+## Накатить миграции
+
+```bash
+alembic upgrade head
+```
+
