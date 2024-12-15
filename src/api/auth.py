@@ -1,13 +1,17 @@
+import datetime
+
+import redis
 from async_fastapi_jwt_auth import AuthJWT
 from fastapi import APIRouter, HTTPException, status
 from fastapi.params import Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from core.config import settings
 from db.postgres import pg_helper
+from db.redis import get_redis_connection
 from models import User
 from schemas.user import UserBaseOut, UserIn, UserLogin
 from services.users import create_user as services_create_user
@@ -19,12 +23,37 @@ http_bearer = HTTPBearer()
 # Настройки конфигурации JWT
 class Settings(BaseModel):
     authjwt_secret_key: str = settings.authjwt_secret_key  # Замените на ваш секретный ключ
-    algorithm: str = 'RS256'
+    algorithm: str = "RS256"
 
 # Передача конфигурации библиотеке AuthJWT
 @AuthJWT.load_config
 def get_config():
     return Settings()
+
+
+async def get_user_by_email(
+        email: str,
+        session: AsyncSession,
+) -> User | None:
+    result = await session.execute(select(User).where(User.email == email))
+    user = result.scalars().first()
+    return user
+
+async def validate_auth_user_login(
+        email: str,
+        password: str,
+        session: AsyncSession = Depends(pg_helper.session_getter)
+) -> User:
+    unauth_exc = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="invalid username or password"
+    )
+    if not (user := await get_user_by_email(email, session=session)):
+        raise unauth_exc
+    if not user.check_password(password):
+        raise unauth_exc
+    return user
+
 
 @router.post("/register", response_model=UserBaseOut)
 async def create_user(
@@ -44,30 +73,8 @@ async def create_user(
     )
     return user
 
-async def get_user_by_email(
-        email: str,
-        session: AsyncSession,
-) -> User | None:
-    result = await session.execute(select(User).where(User.email == email))
-    user = result.scalars().first()
-    return user
 
-async def validate_auth_user_login(
-        email: str,
-        password: str,
-        session: AsyncSession = Depends(pg_helper.session_getter)
-):
-    unauth_exc = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail='invalid username or password'
-    )
-    if not (user := await get_user_by_email(email, session=session)):
-        raise unauth_exc
-    if not user.check_password(password):
-        raise unauth_exc
-    return user
-
-@router.post('/login')
+@router.post("/login")
 async def login(
         user: UserLogin = Depends(validate_auth_user_login),
         Authorize: AuthJWT = Depends(),
@@ -77,7 +84,7 @@ async def login(
     return {"access_token": access_token, "refresh_token": refresh_token}
 
 
-@router.post('/refresh')
+@router.post("/refresh")
 async def refresh(
         credentials: HTTPAuthorizationCredentials = Depends(http_bearer),
         Authorize: AuthJWT = Depends(),
@@ -87,5 +94,25 @@ async def refresh(
         current_user = await Authorize.get_jwt_subject()
         new_access_token = await Authorize.create_access_token(subject=current_user)
         return {"access_token": new_access_token}
-    except Exception as e:
+    except Exception:
         raise HTTPException(status_code=401, detail="Refresh token invalid")
+
+
+@router.post("/logout")
+async def logout(
+        credentials: HTTPAuthorizationCredentials = Depends(http_bearer),
+        Authorize: AuthJWT = Depends(),
+        redis: redis.Redis = Depends(get_redis_connection)
+):
+    try:
+        await Authorize.jwt_required()
+        token = await Authorize.get_raw_jwt()
+        jti = token["jti"]
+        exp = token["exp"]
+        redis.setex(f"blacklist:{jti}", exp - int(datetime.datetime.now().timestamp()), "true")
+        return {"msg": "Вы вышли из системы"}
+    except Exception:
+        raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Token invalid"
+        )
