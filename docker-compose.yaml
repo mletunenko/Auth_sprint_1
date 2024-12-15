@@ -14,8 +14,11 @@ services:
 
   alembic-migrations:
     build: .
+    depends_on:
+      - postgres
     environment:
       APP_CONFIG__DB__URL: postgresql+asyncpg://user:password@postgres:5432/auth
     restart: "no"
     command: >
       alembic upgrade head
+    

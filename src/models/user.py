@@ -20,7 +20,7 @@ class User(Base):
         self.password = pbkdf2_sha256.hash(raw_password)
 
     def check_password(self, raw_password: str) -> bool:
-        return pbkdf2_sha256.verify(self.password, raw_password)
+        return pbkdf2_sha256.verify(raw_password, self.password)
 
     def __repr__(self) -> str:
         return f"<User {self.email}>"
