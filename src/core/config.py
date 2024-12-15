@@ -33,6 +33,11 @@ class DatabaseConfig(BaseModel):
     }
 
 
+class RedisConfig(BaseModel):
+    url: str = "localhost"
+    port: int = 6379
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env.example", ".env"),
@@ -43,6 +48,7 @@ class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     db: DatabaseConfig
     authjwt_secret_key: str
+    redis: RedisConfig = RedisConfig()
 
 
 settings = Settings()
