@@ -21,4 +21,21 @@ services:
     restart: "no"
     command: >
       alembic upgrade head
-    
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+#  auth-app:
+#    build: .
+#    depends_on:
+#      - postgres
+#    environment:
+#      APP_CONFIG__DB__URL: postgresql+asyncpg://user:password@postgres:5432/auth
+#    restart: unless-stopped
+#    ports:
+#      - "8000:8000"
+#    tty: true
+#    command: >
+#      gunicorn w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
