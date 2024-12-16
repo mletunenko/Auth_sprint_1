@@ -14,9 +14,6 @@ class User(Base):
     email: Mapped[str] = mapped_column(nullable=False)
     first_name: Mapped[str] = mapped_column(nullable=False, default="")
     last_name: Mapped[str] = mapped_column(nullable=False, default="")
-    created_at: Mapped[datetime.datetime] = mapped_column(
-        TIMESTAMP(timezone=True),
-        default=datetime.datetime.now(datetime.timezone.utc))
 
     def set_password(self, raw_password: str) -> None:
         self.password = pbkdf2_sha256.hash(raw_password)

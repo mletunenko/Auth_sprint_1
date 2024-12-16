@@ -1,6 +1,7 @@
+import datetime
 import uuid
 
-from sqlalchemy import MetaData
+from sqlalchemy import TIMESTAMP, MetaData
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr
 from sqlalchemy.testing.schema import mapped_column
@@ -26,4 +27,8 @@ class Base(DeclarativeBase):
         default=uuid.uuid4,
         unique=True,
         nullable=False
+    )
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        TIMESTAMP(timezone=True),
+        default=datetime.datetime.now(datetime.timezone.utc)
     )
