@@ -3,7 +3,7 @@ import datetime
 import redis
 from async_fastapi_jwt_auth import AuthJWT
 from async_fastapi_jwt_auth.auth_jwt import AuthJWTBearer
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Response, status
 from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -97,7 +97,7 @@ async def logout(
         jti = token["jti"]
         exp = token["exp"]
         redis.setex(f"blacklist:{jti}", exp - int(datetime.datetime.now().timestamp()), "true")
-        return {"msg": "Вы вышли из системы"}
+        return Response(status_code=200)
     except Exception:
         raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
