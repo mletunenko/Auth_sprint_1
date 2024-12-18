@@ -72,9 +72,14 @@ async def logout(
     try:
         await authorize.jwt_required()
         token = await authorize.get_raw_jwt()
-        invalidate_token(token, redis)
-        return Response(status_code=200)
-    except Exception:
+        if await invalidate_token(token, redis):
+            return Response(status_code=200)
+    except ConnectionError:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Request cannot be completed"
+        )
+    except Exception as e:
         raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Token invalid"

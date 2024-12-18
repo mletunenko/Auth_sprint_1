@@ -1,14 +1,15 @@
 import datetime
 
 import backoff
-import redis
+from redis.exceptions import ConnectionError
+from redis.asyncio import Redis
 
 
-@backoff.on_exception(backoff.expo, ConnectionError, max_tries=15)
-def invalidate_token(
+@backoff.on_exception(backoff.expo, ConnectionError, max_time=15)
+async def invalidate_token(
         token: dict,
-        redis: redis.Redis,
+        redis: Redis,
 ) -> bool:
     jti = token["jti"]
     exp = token["exp"]
-    return redis.setex(f"blacklist:{jti}", exp - int(datetime.datetime.now().timestamp()), "true")
+    return await redis.setex(f"blacklist:{jti}", exp - int(datetime.datetime.now().timestamp()), "true")
