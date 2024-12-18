@@ -1,9 +1,13 @@
 from logging import config as logging_config
+from pathlib import Path
 
+from async_fastapi_jwt_auth import AuthJWT
 from pydantic import BaseModel, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from core.logger import LOGGING
+
+BASE_DIR = Path(__file__).parent.parent
 
 # Применяем настройки логирования
 logging_config.dictConfig(LOGGING)
@@ -30,6 +34,11 @@ class DatabaseConfig(BaseModel):
     }
 
 
+class RedisConfig(BaseModel):
+    url: str = "localhost"
+    port: int = 6379
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env.example", ".env"),
@@ -39,6 +48,13 @@ class Settings(BaseSettings):
     )
     run: RunConfig = RunConfig()
     db: DatabaseConfig
+    authjwt_secret_key: str
+    algorithm: str = "RS256"
+    redis: RedisConfig = RedisConfig()
 
 
 settings = Settings()
+
+@AuthJWT.load_config
+def get_config():
+    return settings
