@@ -12,6 +12,7 @@ from core.config import get_config
 from db.postgres import pg_helper
 from db.redis import get_redis_connection
 from models import User
+from schemas.token import TokenInfo
 from schemas.user import UserBaseOut, UserIn, UserLogin
 from services.users import create_user as services_create_user
 from services.users import validate_auth_user_login
@@ -40,27 +41,27 @@ async def create_user(
     return user
 
 
-@router.post("/login")
+@router.post("/login", response_model=TokenInfo)
 async def login(
         user: UserLogin,
         session: AsyncSession = Depends(pg_helper.session_getter),
         authorize: AuthJWT = Depends(auth_bearer),
-):
+) -> TokenInfo:
     validated_user = await validate_auth_user_login(user, session)
     access_token = await authorize.create_access_token(subject=str(validated_user.id))
     refresh_token = await authorize.create_refresh_token(subject=str(validated_user.id))
-    return {"access_token": access_token, "refresh_token": refresh_token}
+    return TokenInfo(access=access_token, refresh=refresh_token)
 
 
 @router.post("/refresh")
 async def refresh(
-        Authorize: AuthJWT = Depends(get_config),
-):
+        authorize: AuthJWT = Depends(auth_bearer),
+) -> TokenInfo:
     try:
-        await Authorize.jwt_refresh_token_required()
-        current_user = await Authorize.get_jwt_subject()
-        new_access_token = await Authorize.create_access_token(subject=current_user)
-        return {"access_token": new_access_token}
+        await authorize.jwt_refresh_token_required()
+        current_user = await authorize.get_jwt_subject()
+        new_access_token = await authorize.create_access_token(subject=current_user)
+        return TokenInfo(access=new_access_token)
     except Exception:
         raise HTTPException(status_code=401, detail="Refresh token invalid")
 
