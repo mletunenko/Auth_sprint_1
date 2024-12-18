@@ -14,34 +14,11 @@ from db.redis import get_redis_connection
 from models import User
 from schemas.user import UserBaseOut, UserIn, UserLogin
 from services.users import create_user as services_create_user
+from services.users import validate_auth_user_login
 
 router = APIRouter()
 
 auth_bearer = AuthJWTBearer()
-
-
-async def get_user_by_email(
-        email: str,
-        session: AsyncSession,
-) -> User | None:
-    result = await session.execute(select(User).where(User.email == email))
-    user = result.scalars().first()
-    return user
-
-async def validate_auth_user_login(
-        email: str,
-        password: str,
-        session: AsyncSession = Depends(pg_helper.session_getter)
-) -> User:
-    unauth_exc = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="invalid username or password"
-    )
-    if not (user := await get_user_by_email(email, session=session)):
-        raise unauth_exc
-    if not user.check_password(password):
-        raise unauth_exc
-    return user
 
 
 @router.post("/register", response_model=UserBaseOut)
@@ -65,11 +42,13 @@ async def create_user(
 
 @router.post("/login")
 async def login(
-        user: UserLogin = Depends(validate_auth_user_login),
+        user: UserLogin,
+        session: AsyncSession = Depends(pg_helper.session_getter),
         authorize: AuthJWT = Depends(auth_bearer),
 ):
-    access_token = await authorize.create_access_token(subject=str(user.id))
-    refresh_token = await authorize.create_refresh_token(subject=str(user.id))
+    validated_user = await validate_auth_user_login(user, session)
+    access_token = await authorize.create_access_token(subject=str(validated_user.id))
+    refresh_token = await authorize.create_refresh_token(subject=str(validated_user.id))
     return {"access_token": access_token, "refresh_token": refresh_token}
 
 
@@ -90,7 +69,7 @@ async def refresh(
 async def logout(
         authorize: AuthJWT = Depends(auth_bearer),
         redis: redis.Redis = Depends(get_redis_connection)
-):
+) -> Response:
     try:
         await authorize.jwt_required()
         token = await authorize.get_raw_jwt()
