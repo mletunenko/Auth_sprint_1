@@ -1,5 +1,3 @@
-import datetime
-
 import redis
 from async_fastapi_jwt_auth import AuthJWT
 from async_fastapi_jwt_auth.auth_jwt import AuthJWTBearer
@@ -8,12 +6,12 @@ from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from core.config import get_config
 from db.postgres import pg_helper
 from db.redis import get_redis_connection
 from models import User
 from schemas.token import TokenInfo
 from schemas.user import UserBaseOut, UserIn, UserLogin
+from services.token import invalidate_token
 from services.users import create_user as services_create_user
 from services.users import validate_auth_user_login
 
@@ -74,9 +72,7 @@ async def logout(
     try:
         await authorize.jwt_required()
         token = await authorize.get_raw_jwt()
-        jti = token["jti"]
-        exp = token["exp"]
-        redis.setex(f"blacklist:{jti}", exp - int(datetime.datetime.now().timestamp()), "true")
+        invalidate_token(token, redis)
         return Response(status_code=200)
     except Exception:
         raise HTTPException(
