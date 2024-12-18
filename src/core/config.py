@@ -1,6 +1,7 @@
 from logging import config as logging_config
 from pathlib import Path
 
+from async_fastapi_jwt_auth import AuthJWT
 from pydantic import BaseModel, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -48,7 +49,12 @@ class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     db: DatabaseConfig
     authjwt_secret_key: str
+    algorithm: str = "RS256"
     redis: RedisConfig = RedisConfig()
 
 
 settings = Settings()
+
+@AuthJWT.load_config
+def get_config():
+    return settings

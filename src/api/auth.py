@@ -2,14 +2,13 @@ import datetime
 
 import redis
 from async_fastapi_jwt_auth import AuthJWT
+from async_fastapi_jwt_auth.auth_jwt import AuthJWTBearer
 from fastapi import APIRouter, HTTPException, status
 from fastapi.params import Depends
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from core.config import settings
+from core.config import get_config
 from db.postgres import pg_helper
 from db.redis import get_redis_connection
 from models import User
@@ -18,17 +17,7 @@ from services.users import create_user as services_create_user
 
 router = APIRouter()
 
-http_bearer = HTTPBearer()
-
-# Настройки конфигурации JWT
-class Settings(BaseModel):
-    authjwt_secret_key: str = settings.authjwt_secret_key  # Замените на ваш секретный ключ
-    algorithm: str = "RS256"
-
-# Передача конфигурации библиотеке AuthJWT
-@AuthJWT.load_config
-def get_config():
-    return Settings()
+auth_bearer = AuthJWTBearer()
 
 
 async def get_user_by_email(
@@ -77,17 +66,16 @@ async def create_user(
 @router.post("/login")
 async def login(
         user: UserLogin = Depends(validate_auth_user_login),
-        Authorize: AuthJWT = Depends(),
+        authorize: AuthJWT = Depends(auth_bearer),
 ):
-    access_token = await Authorize.create_access_token(subject=str(user.id))
-    refresh_token = await Authorize.create_refresh_token(subject=str(user.id))
+    access_token = await authorize.create_access_token(subject=str(user.id))
+    refresh_token = await authorize.create_refresh_token(subject=str(user.id))
     return {"access_token": access_token, "refresh_token": refresh_token}
 
 
 @router.post("/refresh")
 async def refresh(
-        credentials: HTTPAuthorizationCredentials = Depends(http_bearer),
-        Authorize: AuthJWT = Depends(),
+        Authorize: AuthJWT = Depends(get_config),
 ):
     try:
         await Authorize.jwt_refresh_token_required()
@@ -100,13 +88,12 @@ async def refresh(
 
 @router.post("/logout")
 async def logout(
-        credentials: HTTPAuthorizationCredentials = Depends(http_bearer),
-        Authorize: AuthJWT = Depends(),
+        authorize: AuthJWT = Depends(auth_bearer),
         redis: redis.Redis = Depends(get_redis_connection)
 ):
     try:
-        await Authorize.jwt_required()
-        token = await Authorize.get_raw_jwt()
+        await authorize.jwt_required()
+        token = await authorize.get_raw_jwt()
         jti = token["jti"]
         exp = token["exp"]
         redis.setex(f"blacklist:{jti}", exp - int(datetime.datetime.now().timestamp()), "true")
