@@ -145,7 +145,19 @@ content-type: application/json
     "password": "password"
 }
 ```
+- обновление access-токена;
 
+```http
+POST http://0.0.0.0:8000/auth/refresh
+Authorization: Bearer <REFRESH_TOKEN>
+```
+
+- выход пользователя из аккаунта;
+
+```http
+POST http://0.0.0.0:8000/auth/logout
+Authorization: Bearer <ACCESS_TOKEN>
+```
 
 #### Account Management Controller
 - личный кабинет;
@@ -158,7 +170,7 @@ content-type: application/json
 
 ```http
 GET http://0.0.0.0:8000/auth/me
-Authorization: Bearer <TOKEN?>
+Authorization: Bearer <ACCESS_TOKEN>
 ```
 
 

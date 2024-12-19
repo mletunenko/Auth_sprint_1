@@ -5,6 +5,7 @@ from fastapi import APIRouter, HTTPException, Response, status
 from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from pydantic import UUID4
 
 from db.postgres import pg_helper
 from db.redis import get_redis_connection
@@ -86,19 +87,20 @@ async def logout(
         )
 
 
-@router.get("/me", response_model=UserAccountOut)
+@router.get("/me", response_model=UserLogin)
 async def account_page(
     session: AsyncSession = Depends(pg_helper.session_getter),
     authorize: AuthJWT = Depends(auth_bearer),
-) -> UserAccountOut:
+) -> UserLogin:
     """
     Эндпоинт для страницы Личный кабине
     Доступен только для аутентифицированных юзеров
     Достает id из JWT токена, и возвращает модель
     """
     await authorize.jwt_required()
-    user_id = await authorize.get_jwt_subject()
-    user = await service_account_page(user_id=user_id, session=session)
+    user_id: UUID4 = await authorize.get_jwt_subject()
+    user: UserLogin = await service_account_page(user_id, session)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+
     return user
