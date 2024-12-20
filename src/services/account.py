@@ -1,9 +1,9 @@
+from pydantic import UUID4
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models import User
 from schemas.user import UserAccountOut, UserLogin
-from pydantic import UUID4
 
 
 async def account_page(

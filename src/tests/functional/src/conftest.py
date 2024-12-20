@@ -1,13 +1,13 @@
 import aiohttp
 import pytest_asyncio
-from sqlalchemy.ext.asyncio import AsyncSession
 from async_fastapi_jwt_auth import AuthJWT
 from fastapi.params import Depends
 from redis.asyncio import Redis
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from db.postgres import pg_helper
 from models.user import User
-from src.settings import (redis_test_settings,
-                          webapp_test_settings)
+from src.settings import redis_test_settings, webapp_test_settings
 
 
 @pytest_asyncio.fixture(scope='session', loop_scope='session')

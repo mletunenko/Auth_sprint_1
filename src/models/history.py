@@ -1,7 +1,9 @@
 import datetime
 import uuid
+
 from sqlalchemy import TIMESTAMP, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
+
 from .base import Base
 
 

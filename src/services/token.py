@@ -1,8 +1,8 @@
 import datetime
 
 import backoff
-from redis.exceptions import ConnectionError
 from redis.asyncio import Redis
+from redis.exceptions import ConnectionError
 
 
 @backoff.on_exception(backoff.expo, ConnectionError, max_time=15)

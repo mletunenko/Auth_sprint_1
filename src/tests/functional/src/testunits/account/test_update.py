@@ -1,5 +1,7 @@
 from http import HTTPStatus
+
 import pytest
+
 from models.user import User
 
 

@@ -1,18 +1,18 @@
 from typing import Dict, List
+
 from async_fastapi_jwt_auth import AuthJWT
 from async_fastapi_jwt_auth.auth_jwt import AuthJWTBearer
-from fastapi import APIRouter, HTTPException
-from fastapi import Depends, HTTPException
-from db.postgres import pg_helper
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import UUID4
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.exc import IntegrityError
-from models.user import User
-from schemas.user import UserUpdate, UserLogin
-from models.history import LoginHistory
-from pydantic import UUID4
-from services.account import account_page as service_account_page
 
+from db.postgres import pg_helper
+from models.history import LoginHistory
+from models.user import User
+from schemas.user import UserLogin, UserUpdate
+from services.account import account_page as service_account_page
 
 router = APIRouter()
 auth_bearer = AuthJWTBearer()
