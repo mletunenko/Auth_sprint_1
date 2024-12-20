@@ -34,10 +34,11 @@ app.include_router(
 )
 
 
-# Для модуля api/basic.py JWT аутентификации https://sijokun.github.io/async-fastapi-jwt-auth/usage/basic/
 @app.exception_handler(AuthJWTException)
 def authjwt_exception_handler(request: Request, exc: AuthJWTException):
-    return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
+    return JSONResponse(
+        status_code=exc.status_code, content={"detail": exc.message}
+    )
 
 
 if __name__ == "__main__":
