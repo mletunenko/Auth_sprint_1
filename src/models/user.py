@@ -8,6 +8,8 @@ from .base import Base
 
 
 class User(Base):
+    __tablename__ = "users"
+
     password: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False)
     first_name: Mapped[str] = mapped_column(nullable=False, default="")

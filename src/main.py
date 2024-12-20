@@ -2,13 +2,19 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 import uvicorn
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, APIRouter, Request
 from fastapi.responses import JSONResponse
 from async_fastapi_jwt_auth.exceptions import AuthJWTException
 
 from api.auth import router as auth_router
+from api.account import router as account_router
 from core.config import settings
 from db.postgres import pg_helper
+
+
+combined_router = APIRouter()
+combined_router.include_router(auth_router)
+combined_router.include_router(account_router)
 
 
 @asynccontextmanager
@@ -23,7 +29,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 app.include_router(
-    auth_router,
+    combined_router,
     prefix="/auth"
 )
 

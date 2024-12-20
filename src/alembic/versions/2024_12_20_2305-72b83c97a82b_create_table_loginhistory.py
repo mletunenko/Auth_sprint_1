@@ -1,19 +1,18 @@
-"""Add LoginHistory model
+"""Create table  LoginHistory
 
-Revision ID: f966d4bebbcc
+Revision ID: 72b83c97a82b
 Revises: f3a928b44635
-Create Date: 2024-12-20 00:22:55.942169
+Create Date: 2024-12-20 23:05:27.402818
 
 """
 from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects import postgresql
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'f966d4bebbcc'
+revision: str = '72b83c97a82b'
 down_revision: Union[str, None] = 'f3a928b44635'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,7 +24,7 @@ def upgrade() -> None:
         'login_history',
         sa.Column('id', sa.UUID(), autoincrement=False, nullable=False),
         sa.Column('user_id', sa.UUID(), autoincrement=False, nullable=False),
-        sa.Column('timestamp', postgresql.TIMESTAMP(timezone=True), autoincrement=False, nullable=False),
+        sa.Column('timestamp', sa.TIMESTAMP(timezone=True), autoincrement=False, nullable=False),
         sa.Column('ip_address', sa.VARCHAR(), autoincrement=False, nullable=False),
         sa.Column('user_agent', sa.VARCHAR(), autoincrement=False, nullable=True),
         sa.ForeignKeyConstraint(['user_id'], ['users.id'], name='fk_login_history_user_id_users'),

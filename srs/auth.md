@@ -173,6 +173,27 @@ GET http://0.0.0.0:8000/auth/me
 Authorization: Bearer <ACCESS_TOKEN>
 ```
 
+- получение пользователем своей истории входов в аккаунт;
+
+```http
+GET http://0.0.0.0:8000/auth/history
+Authorization: Bearer <ACCESS_TOKEN>
+```
+
+- изменение логина или пароля
+
+```http
+PATCH http://0.0.0.0:8000/auth/update
+content-type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+
+{
+    "email": "user_new@mail.com",
+    "password": "password_new"
+}
+```
+
+
 
 ### API для управления доступами
 
