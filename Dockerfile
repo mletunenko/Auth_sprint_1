@@ -12,4 +12,5 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
     python -m pip install -U pip wheel && python -m pip install -r requirements.txt
 
-COPY . /app
+COPY src /app/src
+COPY /post-process/wait-for-it.sh /scripts/
