@@ -1,5 +1,5 @@
-from redis.asyncio import Redis
 from redis import RedisError
+from redis.asyncio import Redis
 
 from core.config import settings
 

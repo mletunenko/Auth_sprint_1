@@ -117,7 +117,7 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                email:
                   type: string
                 password:
                   type: string
@@ -143,10 +143,30 @@ paths:
                 items:
                   type: object
                   properties:
-                    timestamp:
+                    date_time:
                       type: string
                     ip_address:
                       type: string
+                    user-agent:
+                      type: string
+        '401':
+          description: Неавторизованный запрос
+
+  /auth/me:
+    get:
+      summary: Личный кабинет
+      responses:
+        '200':
+          description: Личный кабинет пользователя
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  password:
+                    type: string
         '401':
           description: Неавторизованный запрос
 

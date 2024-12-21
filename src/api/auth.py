@@ -1,7 +1,7 @@
 import redis
 from async_fastapi_jwt_auth import AuthJWT
 from async_fastapi_jwt_auth.auth_jwt import AuthJWTBearer
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, HTTPException, Request, Response, status
 from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -9,6 +9,7 @@ from sqlalchemy.future import select
 from db.postgres import pg_helper
 from db.redis import get_redis_connection
 from models import User
+from models.history import LoginHistory
 from schemas.token import TokenInfo
 from schemas.user import UserBaseOut, UserIn, UserLogin
 from services.token import invalidate_token
@@ -16,7 +17,6 @@ from services.users import create_user as services_create_user
 from services.users import validate_auth_user_login
 
 router = APIRouter()
-
 auth_bearer = AuthJWTBearer()
 
 
@@ -25,7 +25,9 @@ async def create_user(
         user_create: UserIn,
         session: AsyncSession = Depends(pg_helper.session_getter),
 ) -> UserBaseOut:
-    result = await session.execute(select(User).where(User.email == user_create.email))
+    result = await session.execute(
+        select(User).where(User.email == user_create.email)
+    )
     existing_user = result.scalars().first()
     if existing_user:
         raise HTTPException(
@@ -42,12 +44,31 @@ async def create_user(
 @router.post("/login", response_model=TokenInfo)
 async def login(
         user: UserLogin,
+        request: Request,
         session: AsyncSession = Depends(pg_helper.session_getter),
         authorize: AuthJWT = Depends(auth_bearer),
 ) -> TokenInfo:
     validated_user = await validate_auth_user_login(user, session)
-    access_token = await authorize.create_access_token(subject=str(validated_user.id))
-    refresh_token = await authorize.create_refresh_token(subject=str(validated_user.id))
+
+    # Создание токенов
+    access_token = await authorize.create_access_token(
+        subject=str(validated_user.id)
+    )
+    refresh_token = await authorize.create_refresh_token(
+        subject=str(validated_user.id)
+    )
+
+    # Сохранение истории входа
+    ip_address = request.client.host
+    user_agent = request.headers.get("user-agent", "unknown")
+    login_history = LoginHistory(
+        user_id=validated_user.id,
+        ip_address=ip_address,
+        user_agent=user_agent
+    )
+    session.add(login_history)
+    await session.commit()
+
     return TokenInfo(access=access_token, refresh=refresh_token)
 
 
@@ -58,7 +79,9 @@ async def refresh(
     try:
         await authorize.jwt_refresh_token_required()
         current_user = await authorize.get_jwt_subject()
-        new_access_token = await authorize.create_access_token(subject=current_user)
+        new_access_token = await authorize.create_access_token(
+            subject=current_user
+        )
         return TokenInfo(access=new_access_token)
     except Exception:
         raise HTTPException(status_code=401, detail="Refresh token invalid")
@@ -79,8 +102,8 @@ async def logout(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Request cannot be completed"
         )
-    except Exception as e:
+    except Exception:
         raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Token invalid"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token invalid"
         )

@@ -55,6 +55,7 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
+
 @AuthJWT.load_config
 def get_config():
     return settings

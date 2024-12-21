@@ -120,10 +120,78 @@ pass
 - обновление access-токена;
 - выход пользователя из аккаунта;
 
+##### Примеры запросов
 
-#### Account Management Controller"
+- регистрация пользователя
+
+```http
+POST http://0.0.0.0:8000/auth/register
+content-type: application/json
+
+{
+    "email": "user@mail.com",
+    "password": "password"
+}
+```
+
+- вход пользователя в аккаунт (обмен логина и пароля на пару токенов: JWT-access токен и refresh токен);
+
+```http
+POST http://0.0.0.0:8000/auth/login
+content-type: application/json
+
+{
+    "email": "user@mail.com",
+    "password": "password"
+}
+```
+- обновление access-токена;
+
+```http
+POST http://0.0.0.0:8000/auth/refresh
+Authorization: Bearer <REFRESH_TOKEN>
+```
+
+- выход пользователя из аккаунта;
+
+```http
+POST http://0.0.0.0:8000/auth/logout
+Authorization: Bearer <ACCESS_TOKEN>
+```
+
+#### Account Management Controller
+- личный кабинет;
 - получение пользователем своей истории входов в аккаунт;
 - изменение логина или пароля (с отправкой email вы познакомитесь в следующих модулях, поэтому пока ваш сервис должен позволять изменять личные данные без дополнительных подтверждений);
+
+##### Примеры запросов
+
+- Личный кабинет
+
+```http
+GET http://0.0.0.0:8000/auth/me
+Authorization: Bearer <ACCESS_TOKEN>
+```
+
+- получение пользователем своей истории входов в аккаунт;
+
+```http
+GET http://0.0.0.0:8000/auth/history
+Authorization: Bearer <ACCESS_TOKEN>
+```
+
+- изменение логина или пароля
+
+```http
+PATCH http://0.0.0.0:8000/auth/update
+content-type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+
+{
+    "email": "user_new@mail.com",
+    "password": "password_new"
+}
+```
 
 
 

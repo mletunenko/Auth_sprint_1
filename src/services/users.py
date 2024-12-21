@@ -16,6 +16,7 @@ async def create_user(
     await session.commit()
     return user
 
+
 async def get_user_by_email(
         email: str,
         session: AsyncSession,
@@ -23,6 +24,7 @@ async def get_user_by_email(
     result = await session.execute(select(User).where(User.email == email))
     user = result.scalars().first()
     return user
+
 
 async def validate_auth_user_login(
         user: UserLogin,
