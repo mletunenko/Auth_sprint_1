@@ -1,6 +1,7 @@
 import datetime
 import uuid
 
+from pydantic import UUID4
 from sqlalchemy import TIMESTAMP, MetaData
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr
@@ -21,7 +22,7 @@ class Base(DeclarativeBase):
     def __tablename__(cls) -> str:
         return f"{camel_case_to_snake_case(cls.__name__)}s"
 
-    id: Mapped[uuid.UUID] = mapped_column(
+    id: Mapped[UUID4] = mapped_column(
         UUID(as_uuid=True),
         primary_key=True,
         default=uuid.uuid4,
