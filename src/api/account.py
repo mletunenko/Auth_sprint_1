@@ -1,18 +1,21 @@
 from typing import Dict, List
+from redis.asyncio import Redis
 
 from async_fastapi_jwt_auth import AuthJWT
 from async_fastapi_jwt_auth.auth_jwt import AuthJWTBearer
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import UUID4
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from db.postgres import pg_helper
+from db.redis import get_redis_connection
 from models.history import LoginHistory
 from models.user import User
 from schemas.user import UserLogin, UserUpdate
 from services.account import account_page as service_account_page
+from services.token import check_invalid_token
 
 router = APIRouter()
 auth_bearer = AuthJWTBearer()
@@ -23,12 +26,20 @@ async def update_user(
         user_update: UserUpdate,
         session: AsyncSession = Depends(pg_helper.session_getter),
         authorize: AuthJWT = Depends(auth_bearer),
+        redis: Redis = Depends(get_redis_connection)
 ) -> dict:
     """
     Эндпоинт для изменения почты или пароля
     """
 
     await authorize.jwt_required()
+    token = await authorize.get_raw_jwt()
+    if await check_invalid_token(token, redis):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token invalid"
+        )
+
     user_id: UUID4 = await authorize.get_jwt_subject()
 
     result = await session.execute(select(User).where(User.id == user_id))
@@ -65,6 +76,7 @@ async def update_user(
 async def account_page(
     session: AsyncSession = Depends(pg_helper.session_getter),
     authorize: AuthJWT = Depends(auth_bearer),
+    redis: Redis = Depends(get_redis_connection),
 ) -> UserLogin:
     """
     Эндпоинт для страницы Личный кабинет
@@ -72,6 +84,14 @@ async def account_page(
     Достает id из JWT токена, и возвращает модель
     """
     await authorize.jwt_required()
+
+    token = await authorize.get_raw_jwt()
+    if await check_invalid_token(token, redis):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token invalid"
+        )
+
     user_id: UUID4 = await authorize.get_jwt_subject()
     user: UserLogin = await service_account_page(user_id, session)
     if not user:
@@ -83,13 +103,21 @@ async def account_page(
 @router.get("/history", response_model=List[Dict[str, str]])
 async def get_login_history(
         authorize: AuthJWT = Depends(auth_bearer),
-        session: AsyncSession = Depends(pg_helper.session_getter)
+        session: AsyncSession = Depends(pg_helper.session_getter),
+        redis: Redis = Depends(get_redis_connection),
 ) -> List[Dict[str, str]]:
     """
     Эндпоинт для просмотра истории входов пользователя
     """
 
     await authorize.jwt_required()
+
+    token = await authorize.get_raw_jwt()
+    if await check_invalid_token(token, redis):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token invalid"
+        )
 
     # Получение идентификатора пользователя из токена
     user_id: UUID4 = await authorize.get_jwt_subject()

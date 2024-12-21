@@ -1,4 +1,4 @@
-import redis
+from redis.asyncio import Redis
 from async_fastapi_jwt_auth import AuthJWT
 from async_fastapi_jwt_auth.auth_jwt import AuthJWTBearer
 from fastapi import APIRouter, HTTPException, Request, Response, status
@@ -12,7 +12,7 @@ from models import User
 from models.history import LoginHistory
 from schemas.token import TokenInfo
 from schemas.user import UserBaseOut, UserIn, UserLogin
-from services.token import invalidate_token
+from services.token import invalidate_token, check_invalid_token
 from services.users import create_user as services_create_user
 from services.users import validate_auth_user_login
 
@@ -90,11 +90,16 @@ async def refresh(
 @router.post("/logout")
 async def logout(
         authorize: AuthJWT = Depends(auth_bearer),
-        redis: redis.Redis = Depends(get_redis_connection)
+        redis: Redis = Depends(get_redis_connection)
 ) -> Response:
     try:
         await authorize.jwt_required()
         token = await authorize.get_raw_jwt()
+        if await check_invalid_token(token, redis):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token invalid"
+            )
         if await invalidate_token(token, redis):
             return Response(status_code=200)
     except ConnectionError:
