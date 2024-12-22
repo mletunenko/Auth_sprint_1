@@ -31,7 +31,7 @@ services:
   tests:
     build: .
     environment:
-      - PG_URL=postgresql+asyncpg://user:password@postgres:5432/auth-tests
+      - PG_URL=postgresql+asyncpg://user:password@postgres:5432/auth-test
       - REDIS_HOST=redis
       - SERVICE_HOST=auth-app
     restart: "no"
