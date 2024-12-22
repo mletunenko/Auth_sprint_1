@@ -11,8 +11,11 @@ from db.redis import get_redis_connection
 from db.postgres import PostgresHelper, get_pg_helper
 from db.repository import AsyncBaseRepository, AsyncSqlAlchemyRepository
 from schemas.enums import SystemRoles
+from services.role import RoleService
 
 
+def get_role_service():
+    return RoleService
 
 
 async def get_session(
