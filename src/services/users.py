@@ -4,7 +4,6 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 
 from models import User
-from models.user import Role
 from schemas.user import UserIn, UserLogin
 
 
@@ -24,7 +23,7 @@ async def get_user_by_email(
         session: AsyncSession,
 ) -> User | None:
     result = await session.execute(
-        select(User).where(User.email == email).options(joinedload(Role.title))
+        select(User).where(User.email == email).options(joinedload(User.role))
     )
     user = result.scalars().first()
     return user
