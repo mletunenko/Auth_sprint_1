@@ -1,9 +1,8 @@
+from typing import Optional
 from redis import RedisError
 from redis.asyncio import Redis
 
-from core.config import settings
-
-redis_client = Redis(host=settings.redis.url, port=settings.redis.port)
+redis_client: Optional["Redis"] = None
 
 
 async def get_redis_connection() -> Redis:

@@ -1,9 +1,17 @@
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Optional
 
-from sqlalchemy.ext.asyncio import (AsyncEngine, AsyncSession,
-                                    async_sessionmaker, create_async_engine)
+from sqlalchemy.ext.asyncio import (
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine
+)
 
-from core.config import settings
+
+pg_helper: Optional["PostgresHelper"] = None
+
+
+async def get_pg_helper() -> "PostgresHelper":
+    return pg_helper
 
 
 class PostgresHelper:
@@ -35,12 +43,3 @@ class PostgresHelper:
     async def session_getter(self) -> AsyncGenerator[AsyncSession, None]:
         async with self.session_factory() as session:
             yield session
-
-
-pg_helper = PostgresHelper(
-    url=str(settings.db.url),
-    echo=settings.db.echo,
-    echo_pool=settings.db.echo_pool,
-    pool_size=settings.db.pool_size,
-    max_overflow=settings.db.max_overflow,
-)
