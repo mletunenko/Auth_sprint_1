@@ -33,7 +33,7 @@ class WebAppSettings(BaseSettings):
 
     @property
     def service_url(self) -> HttpUrl:
-        return f"http://{self.service_host}:{self.service_port}"
+        return f"http://{self.service_host}:{self.service_port}/auth"
 
 
 pg_settings = DbSettings(env_file_path=".env.tests-local")
