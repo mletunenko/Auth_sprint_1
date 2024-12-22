@@ -32,17 +32,35 @@ async def get_sqlalchemy_repository(
         yield AsyncSqlAlchemyRepository(session)
 
 
-async def check_superuser(authjwt: AuthJWT = Depends()):
-    try:
-        token = await authjwt.get_raw_jwt()
-        user_role = token.get("roles")
-
-        if user_role is not SystemRoles.SUPERUSER:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN, detail="Access forbidden: Superuser required"
-            )
-
-    except Exception:
+async def get_token_сlaims(authjwt: AuthJWT = Depends()):
+    token_claims = await authjwt.get_raw_jwt()
+    if not token_claims:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or missing token"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token required"
+        )
+    return token_claims
+
+
+@backoff.on_exception(backoff.expo, ConnectionError, max_time=15)
+async def check_invalid_token(
+    token_claims: dict = Depends(get_token_сlaims),
+    redis_client: Redis = Depends(get_redis_connection)
+) -> bool:
+    jti = token_claims["jti"]
+    res =  await redis_client.get(f"blacklist:{jti}")
+
+    if res is not None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token invalid"
+        )
+
+
+async def check_superuser(token_claims: dict = Depends(get_token_сlaims)):
+    user_role = token_claims.get("roles")
+
+    if user_role != SystemRoles.SUPERUSER:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Access forbidden: Superuser required"
         )

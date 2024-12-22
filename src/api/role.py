@@ -1,3 +1,4 @@
+from async_fastapi_jwt_auth.auth_jwt import AuthJWTBearer
 from fastapi import APIRouter
 from fastapi.params import Depends
 from pydantic import UUID4
@@ -16,8 +17,11 @@ from .dependencies import (
     get_sqlalchemy_repository,
 )
 
+auth_bearer = AuthJWTBearer()
 router = APIRouter(
     dependencies=[
+        Depends(auth_bearer),
+        Depends(check_invalid_token),
         Depends(check_superuser),
     ]
 )
