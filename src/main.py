@@ -8,12 +8,14 @@ from fastapi.responses import JSONResponse
 
 from api.account import router as account_router
 from api.auth import router as auth_router
+from api.role import router as role_router
 from core.config import settings
 from db.postgres import pg_helper
 
 combined_router = APIRouter()
 combined_router.include_router(auth_router)
 combined_router.include_router(account_router)
+combined_router.include_router(role_router, prefix='/role')
 
 
 @asynccontextmanager
