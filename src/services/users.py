@@ -1,8 +1,10 @@
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import joinedload
 
 from models import User
+from models.user import Role
 from schemas.user import UserIn, UserLogin
 
 
@@ -21,7 +23,9 @@ async def get_user_by_email(
         email: str,
         session: AsyncSession,
 ) -> User | None:
-    result = await session.execute(select(User).where(User.email == email))
+    result = await session.execute(
+        select(User).where(User.email == email).options(joinedload(Role.title))
+    )
     user = result.scalars().first()
     return user
 

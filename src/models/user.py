@@ -1,8 +1,8 @@
 import datetime
-
 from passlib.handlers.pbkdf2 import pbkdf2_sha256
-from sqlalchemy import TIMESTAMP
-from sqlalchemy.orm import Mapped, mapped_column
+from pydantic import UUID4
+from sqlalchemy import ForeignKey, TIMESTAMP
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
 
@@ -14,9 +14,15 @@ class User(Base):
     email: Mapped[str] = mapped_column(nullable=False)
     first_name: Mapped[str] = mapped_column(nullable=False, default="")
     last_name: Mapped[str] = mapped_column(nullable=False, default="")
-    created_at: Mapped[datetime.datetime] = mapped_column(
+
+    role_id: Mapped[UUID4 | None] = mapped_column(ForeignKey("roles.id"))
+    role: Mapped["Role"] = relationship()
+
+    updated_at: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP(timezone=True),
-        default=datetime.datetime.now(datetime.timezone.utc))
+        default=datetime.datetime.now(datetime.timezone.utc),
+        onupdate=datetime.datetime.now(datetime.timezone.utc),
+    )
 
     def set_password(self, raw_password: str) -> None:
         self.password = pbkdf2_sha256.hash(raw_password)
@@ -26,3 +32,13 @@ class User(Base):
 
     def __repr__(self) -> str:
         return f"<User {self.email}>"
+
+
+class Role(Base):
+    __tablename__ = "roles"
+
+    title: Mapped[str] = mapped_column(unique=True)
+    system_role: Mapped[bool | None] = mapped_column(default=False)
+
+    def __repr__(self) -> str:
+        return f"<Role {self.title}>"

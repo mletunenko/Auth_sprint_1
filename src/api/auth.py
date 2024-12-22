@@ -49,13 +49,14 @@ async def login(
         authorize: AuthJWT = Depends(auth_bearer),
 ) -> TokenInfo:
     validated_user = await validate_auth_user_login(user, session)
+    claims = {"roles": validated_user.role.title}
 
     # Создание токенов
     access_token = await authorize.create_access_token(
-        subject=str(validated_user.id)
+        subject=str(validated_user.id), user_claims=claims
     )
     refresh_token = await authorize.create_refresh_token(
-        subject=str(validated_user.id)
+        subject=str(validated_user.id), user_claims=claims
     )
 
     # Сохранение истории входа
@@ -79,8 +80,9 @@ async def refresh(
     try:
         await authorize.jwt_refresh_token_required()
         current_user = await authorize.get_jwt_subject()
+        payload = await authorize.get_raw_jwt()
         new_access_token = await authorize.create_access_token(
-            subject=current_user
+            subject=current_user, payload=payload
         )
         return TokenInfo(access=new_access_token)
     except Exception:
