@@ -7,7 +7,6 @@ import models
 from db.repository import AsyncBaseRepository
 from schemas.enums import ServiceWorkResults
 from schemas.role import CreateRoleDTO, UpdateRoleDTO
-from .constants import "ok"
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +18,6 @@ class RoleService:
         role_dto: CreateRoleDTO, repository: AsyncBaseRepository
     ) -> tuple[ServiceWorkResults, models.Role | None, str | None]:
         try:
-            # TODO add privilege processing
             role_obj = models.Role(title=role_dto.title)
             db_role = await repository.add(role_obj)
             return ServiceWorkResults.SUCCESS, db_role, "ok"

@@ -9,13 +9,13 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from db.postgres import pg_helper
 from db.redis import get_redis_connection
 from models.history import LoginHistory
 from models.user import User
 from schemas.user import UserLogin, UserUpdate
 from services.account import account_page as service_account_page
 from services.token import check_invalid_token
+from .dependencies import get_session
 
 router = APIRouter()
 auth_bearer = AuthJWTBearer()
@@ -24,7 +24,7 @@ auth_bearer = AuthJWTBearer()
 @router.patch("/update")
 async def update_user(
         user_update: UserUpdate,
-        session: AsyncSession = Depends(pg_helper.session_getter),
+        session: AsyncSession = Depends(get_session),
         authorize: AuthJWT = Depends(auth_bearer),
         redis: Redis = Depends(get_redis_connection)
 ) -> dict:
@@ -74,7 +74,7 @@ async def update_user(
 
 @router.get("/me", response_model=UserLogin)
 async def account_page(
-    session: AsyncSession = Depends(pg_helper.session_getter),
+    session: AsyncSession = Depends(get_session),
     authorize: AuthJWT = Depends(auth_bearer),
     redis: Redis = Depends(get_redis_connection),
 ) -> UserLogin:
@@ -103,7 +103,7 @@ async def account_page(
 @router.get("/history", response_model=List[Dict[str, str]])
 async def get_login_history(
         authorize: AuthJWT = Depends(auth_bearer),
-        session: AsyncSession = Depends(pg_helper.session_getter),
+        session: AsyncSession = Depends(get_session),
         redis: Redis = Depends(get_redis_connection),
 ) -> List[Dict[str, str]]:
     """

@@ -6,7 +6,6 @@ from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from db.postgres import pg_helper
 from db.redis import get_redis_connection
 from models import User
 from models.history import LoginHistory
@@ -15,6 +14,7 @@ from schemas.user import UserBaseOut, UserIn, UserLogin
 from services.token import invalidate_token, check_invalid_token
 from services.users import create_user as services_create_user
 from services.users import validate_auth_user_login
+from .dependencies import get_session
 
 router = APIRouter()
 auth_bearer = AuthJWTBearer()
@@ -23,7 +23,7 @@ auth_bearer = AuthJWTBearer()
 @router.post("/register", response_model=UserBaseOut)
 async def create_user(
         user_create: UserIn,
-        session: AsyncSession = Depends(pg_helper.session_getter),
+        session: AsyncSession = Depends(get_session),
 ) -> UserBaseOut:
     result = await session.execute(
         select(User).where(User.email == user_create.email)
@@ -45,12 +45,16 @@ async def create_user(
 async def login(
         user: UserLogin,
         request: Request,
-        session: AsyncSession = Depends(pg_helper.session_getter),
+        session: AsyncSession = Depends(get_session),
         authorize: AuthJWT = Depends(auth_bearer),
 ) -> TokenInfo:
     validated_user = await validate_auth_user_login(user, session)
-    claims = {"roles": validated_user.role.title}
+    try:
+        roles_claim = validated_user.role.title
+    except AttributeError:
+        roles_claim = None
 
+    claims = {"roles": roles_claim}
     # Создание токенов
     access_token = await authorize.create_access_token(
         subject=str(validated_user.id), user_claims=claims

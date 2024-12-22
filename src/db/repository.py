@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any, List, Type
 
 from pydantic import BaseModel
 from sqlalchemy import Column, delete, select, update
@@ -51,7 +51,7 @@ class AsyncSqlAlchemyRepository(AsyncBaseRepository):
             result = await self.session.execute(stmt)
         return result
 
-    async def delete(self, model: Type[models.Base], filter_col: Column, values: list[Any]):
+    async def delete(self, model: Type[models.Base], filter_col: Column, values: List[Any]):
         async with self.session.begin():
             if len(values) == 1:
                 stmt = delete(model).where(filter_col == values[0])
