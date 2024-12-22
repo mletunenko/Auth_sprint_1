@@ -49,8 +49,12 @@ async def login(
         authorize: AuthJWT = Depends(auth_bearer),
 ) -> TokenInfo:
     validated_user = await validate_auth_user_login(user, session)
-    claims = {"roles": validated_user.role.title}
+    try:
+        roles_claim = validated_user.role.title
+    except AttributeError:
+        roles_claim = None
 
+    claims = {"roles": roles_claim}
     # Создание токенов
     access_token = await authorize.create_access_token(
         subject=str(validated_user.id), user_claims=claims
