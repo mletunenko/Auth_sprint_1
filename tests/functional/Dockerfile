@@ -8,5 +8,3 @@ RUN pip install --no-cache-dir -U pip wheel && pip install --no-cache-dir -r req
 
 COPY src .
 COPY /post-process/wait-for-it.sh /scripts/
-
-CMD ["pytest", "src"]
