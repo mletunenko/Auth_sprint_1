@@ -22,17 +22,14 @@ auth_bearer = AuthJWTBearer()
 
 @router.post("/register", response_model=UserBaseOut)
 async def create_user(
-        user_create: UserIn,
-        session: AsyncSession = Depends(get_session),
+    user_create: UserIn,
+    session: AsyncSession = Depends(get_session),
 ) -> UserBaseOut:
-    result = await session.execute(
-        select(User).where(User.email == user_create.email)
-    )
+    result = await session.execute(select(User).where(User.email == user_create.email))
     existing_user = result.scalars().first()
     if existing_user:
         raise HTTPException(
-            status_code=400,
-            detail="User with this username or email already exists"
+            status_code=400, detail="User with this username or email already exists"
         )
     user = await services_create_user(
         user_create=user_create,
@@ -43,10 +40,10 @@ async def create_user(
 
 @router.post("/login", response_model=TokenInfo)
 async def login(
-        user: UserLogin,
-        request: Request,
-        session: AsyncSession = Depends(get_session),
-        authorize: AuthJWT = Depends(auth_bearer),
+    user: UserLogin,
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+    authorize: AuthJWT = Depends(auth_bearer),
 ) -> TokenInfo:
     validated_user = await validate_auth_user_login(user, session)
     try:
@@ -67,9 +64,7 @@ async def login(
     ip_address = request.client.host
     user_agent = request.headers.get("user-agent", "unknown")
     login_history = LoginHistory(
-        user_id=validated_user.id,
-        ip_address=ip_address,
-        user_agent=user_agent
+        user_id=validated_user.id, ip_address=ip_address, user_agent=user_agent
     )
     session.add(login_history)
     await session.commit()
@@ -79,13 +74,14 @@ async def login(
 
 @router.post("/refresh")
 async def refresh(
-        authorize: AuthJWT = Depends(auth_bearer),
+    authorize: AuthJWT = Depends(auth_bearer),
 ) -> TokenInfo:
     try:
         await authorize.jwt_refresh_token_required()
         current_user = await authorize.get_jwt_subject()
+        payload = await authorize.get_raw_jwt()
         new_access_token = await authorize.create_access_token(
-            subject=current_user
+            subject=current_user, user_claims=payload
         )
         return TokenInfo(access=new_access_token)
     except Exception:
@@ -94,26 +90,18 @@ async def refresh(
 
 @router.post("/logout")
 async def logout(
-        authorize: AuthJWT = Depends(auth_bearer),
-        redis: Redis = Depends(get_redis_connection)
+    authorize: AuthJWT = Depends(auth_bearer), redis: Redis = Depends(get_redis_connection)
 ) -> Response:
     try:
         await authorize.jwt_required()
         token = await authorize.get_raw_jwt()
         if await check_invalid_token(token, redis):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Token invalid"
-            )
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid")
         if await invalidate_token(token, redis):
             return Response(status_code=200)
     except ConnectionError:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Request cannot be completed"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Request cannot be completed"
         )
     except Exception:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token invalid"
-        )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid")

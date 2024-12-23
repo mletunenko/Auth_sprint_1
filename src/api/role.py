@@ -50,7 +50,7 @@ async def delete_role(
     repository: AsyncBaseRepository = Depends(get_sqlalchemy_repository),
 ) -> str:
 
-    result, res_msg = role_service.remove_role(role_id, repository)
+    result, res_msg = await role_service.remove_role(role_id, repository)
     if result is ServiceWorkResults.ERROR:
         raise Http500
     if result is ServiceWorkResults.FAIL:
@@ -76,7 +76,7 @@ async def update_role(
     return res_msg
 
 
-@router.get("/list", response_model=ReadRoleDTO)
+@router.get("/list", response_model=list[ReadRoleDTO])
 async def list_roles(
     role_service: RoleService = Depends(get_role_service),
     repository: AsyncBaseRepository = Depends(get_sqlalchemy_repository),

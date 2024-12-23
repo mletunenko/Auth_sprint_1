@@ -5,10 +5,8 @@ services:
       - "5432:5432"
     volumes:
       - pg_test_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: auth-test
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+    env_file:
+      - .env.tests
     healthcheck:
       test: "pg_isready -U user -d auth-test"
       interval: 5s
@@ -39,11 +37,8 @@ services:
 
   tests:
     build: .
-    environment:
-      - PG_URL=postgresql+asyncpg://user:password@postgres:5432/auth-test
-      - REDIS_HOST=redis
-      - SERVICE_HOST=auth-app
-      - PYTHONPATH= /src
+    env_file:
+      - .env.tests
     restart: "no"
     command: >
       /scripts/wait-for-it.sh auth-app:8000 -s -t 60 --
