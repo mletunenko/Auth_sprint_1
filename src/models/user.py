@@ -15,7 +15,7 @@ class User(Base):
     first_name: Mapped[str] = mapped_column(nullable=False, default="")
     last_name: Mapped[str] = mapped_column(nullable=False, default="")
 
-    role_id: Mapped[UUID4 | None] = mapped_column(ForeignKey("roles.id"))
+    role_id: Mapped[UUID4 | None] = mapped_column(ForeignKey("roles.id", ondelete="SET NULL"))
     role: Mapped["Role"] = relationship()
 
     updated_at: Mapped[datetime.datetime] = mapped_column(

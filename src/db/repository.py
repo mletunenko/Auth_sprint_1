@@ -33,8 +33,7 @@ class AsyncSqlAlchemyRepository(AsyncBaseRepository):
     async def list(self, model: Type[models.Base]) -> list[models.Base]:
         stmt = select(model)
         result = await self.session.execute(stmt)
-        result.scalars()
-        return result.all()
+        return result.scalars().all()
 
     async def add(self, model_obj: models.Base) -> models.Base:
         async with self.session.begin():

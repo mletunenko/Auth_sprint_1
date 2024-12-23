@@ -26,40 +26,6 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade():
-    # Insert predefined roles
-    roles_table = sa.table(
-        "roles",
-        sa.Column("id", sa.dialects.postgresql.UUID(as_uuid=True)),
-        sa.Column("title", sa.String),
-        sa.Column("system_role", sa.Boolean),
-        sa.Column("created_at", sa.TIMESTAMP(timezone=True)),
-    )
-    created_at = datetime.now(timezone.utc)
-    op.bulk_insert(
-        roles_table,
-        [
-            {
-                "id": str(uuid4()),
-                "title": "superuser",
-                "system_role": True,
-                "created_at": created_at,
-            },
-            {"id": str(uuid4()), "title": "admin", "system_role": True, "created_at": created_at},
-            {
-                "id": str(uuid4()),
-                "title": "subscriber",
-                "system_role": False,
-                "created_at": created_at,
-            },
-            {
-                "id": str(uuid4()),
-                "title": "regular user",
-                "system_role": False,
-                "created_at": created_at,
-            },
-        ],
-    )
-
     op.execute(
         """
         CREATE OR REPLACE FUNCTION prevent_deletion_of_system_roles()
