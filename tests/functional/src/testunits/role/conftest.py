@@ -26,23 +26,6 @@ async def roles_table(table_metadata):
 
 
 @pytest_asyncio.fixture(scope="session", loop_scope="session")
-async def normal_role(db_session_factory, roles_table):
-    normal_role = {
-        "id": uuid.uuid4(),
-        "title": "normal",
-        "created_at": datetime.datetime.now(datetime.timezone.utc),
-    }
-    async with db_session_factory() as session:
-        await session.execute(insert(roles_table).values(normal_role))
-        await session.commit()
-        result = await session.execute(
-            select(roles_table).where(roles_table.c.title == normal_role["title"])
-        )
-        role = result.fetchone()
-        yield role
-
-
-@pytest_asyncio.fixture(scope="session", loop_scope="session")
 def create_role(db_session_factory, roles_table):
     async def inner(title: str):
         role = {
@@ -123,6 +106,40 @@ def get_role_by_title(db_session_factory, roles_table):
 
 
 @pytest_asyncio.fixture(scope="session", loop_scope="session")
+async def super_role(db_session_factory, roles_table):
+    role = {
+        "id": uuid.uuid4(),
+        "title": "superuser",
+        "created_at": datetime.datetime.now(datetime.timezone.utc),
+    }
+    async with db_session_factory() as session:
+        await session.execute(insert(roles_table).values(role))
+        await session.commit()
+        result = await session.execute(
+            select(roles_table).where(roles_table.c.title == role["title"])
+        )
+        role = result.fetchone()
+        yield role
+
+
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
+async def normal_role(db_session_factory, roles_table):
+    normal_role = {
+        "id": uuid.uuid4(),
+        "title": "normal",
+        "created_at": datetime.datetime.now(datetime.timezone.utc),
+    }
+    async with db_session_factory() as session:
+        await session.execute(insert(roles_table).values(normal_role))
+        await session.commit()
+        result = await session.execute(
+            select(roles_table).where(roles_table.c.title == normal_role["title"])
+        )
+        role = result.fetchone()
+        yield role
+
+
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def normal_user(db_session_factory, users_table, normal_role):
     user = {
         "id": uuid.uuid4(),
@@ -139,20 +156,10 @@ async def normal_user(db_session_factory, users_table, normal_role):
         await session.commit()
 
         result = await session.execute(
-            select(users_table).where(users_table.c.email == "regular_user@example.com")
+            select(users_table).where(users_table.c.email == user["email"])
         )
         db_user = result.fetchone()
         yield db_user
-
-
-@pytest_asyncio.fixture(scope="session", loop_scope="session")
-async def super_role(db_session_factory, roles_table):
-    async with db_session_factory() as session:
-        result = await session.execute(
-            select(roles_table).where(roles_table.c.title == "superuser")
-        )
-        role = result.fetchone()
-        yield role
 
 
 @pytest_asyncio.fixture(scope="session", loop_scope="session")
@@ -172,7 +179,7 @@ async def super_user(db_session_factory, users_table, super_role):
         await session.commit()
 
         result = await session.execute(
-            select(users_table).where(users_table.c.email == "superuser@example.com")
+            select(users_table).where(users_table.c.email == user["email"])
         )
         db_user = result.fetchone()
         yield db_user
