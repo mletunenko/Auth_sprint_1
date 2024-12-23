@@ -21,6 +21,7 @@ class BaseSettings(BaseSettings):
 
 class DbSettings(BaseSettings):
     pg_url: PostgresDsn
+    pg_url_sync: PostgresDsn
 
 
 class RedisSettings(BaseSettings):
