@@ -6,7 +6,7 @@ up:
 	docker-compose up -d
 
 up-dev:
-	docker-compose up -d auth-app
+	docker-compose up -d postgres redis auth-app
 
 logs:
 	docker-compose logs $(service)

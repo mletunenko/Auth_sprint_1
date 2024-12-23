@@ -43,6 +43,7 @@ services:
       - PG_URL=postgresql+asyncpg://user:password@postgres:5432/auth-test
       - REDIS_HOST=redis
       - SERVICE_HOST=auth-app
+      - PYTHONPATH= /src
     restart: "no"
     command: >
       /scripts/wait-for-it.sh auth-app:8000 -s -t 60 --
