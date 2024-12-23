@@ -79,6 +79,7 @@ async def refresh(
     try:
         await authorize.jwt_refresh_token_required()
         current_user = await authorize.get_jwt_subject()
+        payload = await authorize.get_raw_jwt()
         new_access_token = await authorize.create_access_token(
             subject=current_user, user_claims=payload
         )
