@@ -23,10 +23,14 @@ class RoleService:
             return ServiceWorkResults.SUCCESS, db_role, "ok"
         except sa_exc.IntegrityError as e:
             logger.error(f"IntegrityError: {e}")
-            return ServiceWorkResults.FAIL, f'Role with title "{role_obj.title}" already exist'
+            return (
+                ServiceWorkResults.FAIL,
+                f'Role with title "{role_obj.title}" already exist',
+                None,
+            )
         except sa_exc.SQLAlchemyError as e:
             logger.exception(f"Database error: {e}")
-            return ServiceWorkResults.ERROR, None
+            return ServiceWorkResults.ERROR, None, None
 
     @staticmethod
     async def remove_role(
@@ -70,7 +74,7 @@ class RoleService:
         repository: AsyncBaseRepository,
     ) -> tuple[ServiceWorkResults, list[models.Role] | None]:
         try:
-            db_roles = await repository.list()
+            db_roles = await repository.list(models.Role)
             return ServiceWorkResults.SUCCESS, db_roles
         except sa_exc.SQLAlchemyError as e:
             logger.exception(f"Database error: {e}")
