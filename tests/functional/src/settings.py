@@ -1,12 +1,13 @@
 import os
 
+from async_fastapi_jwt_auth import AuthJWT
 from dotenv import load_dotenv
 from pydantic import HttpUrl, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class BaseSettings(BaseSettings):
-    model_config = SettingsConfigDict(extra="ignore")
+    model_config = SettingsConfigDict(extra="ignore", env_prefix="TESTS_CONFIG__")
 
     # Если в окружении уже есть переменные, нужно их переписать
     def __init__(self, **data):
@@ -36,6 +37,17 @@ class WebAppSettings(BaseSettings):
         return f"http://{self.service_host}:{self.service_port}/auth"
 
 
+class JwtSettings(BaseSettings):
+    authjwt_secret_key: str = "secret"
+    algorithm: str = "RS256"
+
+
 pg_settings = DbSettings(env_file_path=".env.tests-local")
 redis_settings = RedisSettings(env_file_path=".env.tests-local")
 webapp_settings = WebAppSettings(env_file_path=".env.tests-local")
+jwt_settings = JwtSettings(env_file_path=".env.tests-local")
+
+
+@AuthJWT.load_config
+def get_config():
+    return jwt_settings
