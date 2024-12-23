@@ -83,20 +83,22 @@ async def account_page(
     Доступен только для аутентифицированных юзеров
     Достает id из JWT токена, и возвращает модель
     """
-    await authorize.jwt_required()
+    try:
+        await authorize.jwt_required()
 
-    token = await authorize.get_raw_jwt()
-    if await check_invalid_token(token, redis):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token invalid"
-        )
+        token = await authorize.get_raw_jwt()
+        if await check_invalid_token(token, redis):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token invalid"
+            )
 
-    user_id: UUID4 = await authorize.get_jwt_subject()
+        user_id: UUID4 = await authorize.get_jwt_subject()
+    except Exception:
+        raise HTTPException(status_code=401, detail="Refresh token invalid")
     user: UserLogin = await service_account_page(user_id, session)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-
     return user
 
 
@@ -109,30 +111,29 @@ async def get_login_history(
     """
     Эндпоинт для просмотра истории входов пользователя
     """
+    try:
+        await authorize.jwt_required()
 
-    await authorize.jwt_required()
+        token = await authorize.get_raw_jwt()
+        if await check_invalid_token(token, redis):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token invalid"
+            )
 
-    token = await authorize.get_raw_jwt()
-    if await check_invalid_token(token, redis):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token invalid"
+        user_id: UUID4 = await authorize.get_jwt_subject()
+
+        result = await session.execute(
+            select(LoginHistory).where(
+                LoginHistory.user_id == user_id
+            ).order_by(LoginHistory.timestamp.desc())
         )
+        login_history = result.scalars().all()
 
-    # Получение идентификатора пользователя из токена
-    user_id: UUID4 = await authorize.get_jwt_subject()
-
-    # Запрос истории входов из базы данных
-    result = await session.execute(
-        select(LoginHistory).where(
-            LoginHistory.user_id == user_id
-        ).order_by(LoginHistory.timestamp.desc())
-    )
-    login_history = result.scalars().all()
-
-    # Форматирование данных для ответа
-    return [{
-        "date_time": lh.timestamp.strftime('%a %d %b %Y, %I:%M%p'),
-        "ip_address": lh.ip_address,
-        "user-agent": lh.user_agent
-        } for lh in login_history]
+        return [{
+            "date_time": lh.timestamp.strftime('%a %d %b %Y, %I:%M%p'),
+            "ip_address": lh.ip_address,
+            "user-agent": lh.user_agent
+            } for lh in login_history]
+    except Exception:
+        raise HTTPException(status_code=401, detail="Refresh token invalid")

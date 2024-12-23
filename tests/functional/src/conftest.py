@@ -11,7 +11,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.sql import insert, select
 
-from src.settings import redis_settings, pg_settings, webapp_settings
+from settings import redis_settings, pg_settings, webapp_settings
 
 
 @pytest_asyncio.fixture(scope="session", loop_scope="session")

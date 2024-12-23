@@ -6,5 +6,5 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -U pip wheel && pip install --no-cache-dir -r requirements.txt
 
-COPY src .
+COPY src src
 COPY /post-process/wait-for-it.sh /scripts/
