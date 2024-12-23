@@ -2,23 +2,27 @@ import httpx
 import pytest
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
+from src.settings import pg_settings, webapp_settings
 
-BASE_URL = "http://localhost:8000"
-DATABASE_URL = "postgresql://user:password@localhost:5432/auth-test"
+BASE_URL = f"http://{webapp_settings.service_host}:{webapp_settings.service_port}"
+DATABASE_URL = str(pg_settings.pg_url_sync)
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 @pytest.fixture(scope="session")
 def client():
     with httpx.Client(base_url=BASE_URL) as client:
         yield client
 
+
 @pytest.fixture(scope="function")
 def create_common_user(client):
     user_data = {"email": "test@example.com", "password": "securepassword"}
     client.post("/auth/register", json=user_data)
     return user_data
+
 
 @pytest.fixture(scope="function")
 def login_common_user(client, create_common_user):
