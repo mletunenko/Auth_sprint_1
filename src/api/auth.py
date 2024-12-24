@@ -6,15 +6,23 @@ from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
+from api.exceptions import Http400, Http500
 from db.redis import get_redis_connection
+from db.repository import AsyncBaseRepository
 from models import User
 from models.history import LoginHistory
+from schemas.enums import ServiceWorkResults
 from schemas.token import TokenInfo
 from schemas.user import UserBaseOut, UserIn, UserLogin
-from services.token import invalidate_token, check_invalid_token
+from services.token import authorize_by_user_id, invalidate_token, check_invalid_token
 from services.users import create_user as services_create_user
 from services.users import validate_auth_user_login
-from .dependencies import get_session
+from .dependencies import (
+    get_session,
+    check_superuser,
+    get_sqlalchemy_repository,
+    check_invalid_token as check_invalid_token_depcy
+)
 
 router = APIRouter()
 auth_bearer = AuthJWTBearer()
@@ -105,3 +113,22 @@ async def logout(
         )
     except Exception:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid")
+
+
+@router.post(
+    "/supervised_login/{user_id}",
+    dependencies=[Depends(check_invalid_token_depcy), Depends(check_superuser),]
+)
+async def supervised_login(
+    user_id: str,
+    repository: AsyncBaseRepository = Depends(get_sqlalchemy_repository),
+    authorize: AuthJWT = Depends(auth_bearer)
+) -> TokenInfo:
+    result, token_pair, res_msg = await authorize_by_user_id(user_id, authorize, repository)
+
+    if result is ServiceWorkResults.ERROR:
+        raise Http500
+    if result is ServiceWorkResults.FAIL:
+        raise Http400(res_msg)
+
+    return token_pair
