@@ -160,5 +160,5 @@ async def get_login_history(
             }
         }
 
-    except Exception as ex:
-        raise HTTPException(status_code=401, detail=f"Token invalid or ex {ex}")
+    except Exception:
+        raise HTTPException(status_code=401, detail="Token invalid")
