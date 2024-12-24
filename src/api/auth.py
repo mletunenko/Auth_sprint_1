@@ -12,7 +12,7 @@ from models.history import LoginHistory
 from schemas.token import TokenInfo
 from schemas.user import UserBaseOut, UserIn, UserLogin
 from services.token import invalidate_token, check_invalid_token
-from services.users import create_user as services_create_user
+from services.users import create_user as services_create_user, get_user_by_email
 from services.users import validate_auth_user_login
 from .dependencies import get_session
 
@@ -25,8 +25,10 @@ async def create_user(
     user_create: UserIn,
     session: AsyncSession = Depends(get_session),
 ) -> UserBaseOut:
-    result = await session.execute(select(User).where(User.email == user_create.email))
-    existing_user = result.scalars().first()
+    existing_user = await get_user_by_email(
+        user_create,
+        session,
+    )
     if existing_user:
         raise HTTPException(
             status_code=400, detail="User with this username or email already exists"
