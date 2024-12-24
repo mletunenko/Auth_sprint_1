@@ -3,7 +3,6 @@ import datetime
 
 import aiohttp
 import pytest_asyncio
-from async_fastapi_jwt_auth import AuthJWT
 from passlib.handlers.pbkdf2 import pbkdf2_sha256
 from redis.asyncio import Redis
 from sqlalchemy import MetaData, Table, Column, String, DateTime, ForeignKey, delete
@@ -67,24 +66,6 @@ def make_delete_request(http_client: aiohttp.ClientSession):
         return body, status
 
     return inner
-
-
-@pytest_asyncio.fixture(scope="function", loop_scope="session")
-async def access_token_normal_user(normal_user, normal_role):
-    jwt = AuthJWT()
-    token = await jwt.create_access_token(
-        subject=str(normal_user.id), user_claims={"roles": normal_role.title}
-    )
-    return token
-
-
-@pytest_asyncio.fixture(scope="function", loop_scope="session")
-async def access_token_super_user(super_user, super_role):
-    jwt = AuthJWT()
-    token = await jwt.create_access_token(
-        subject=str(super_user.id), user_claims={"roles": super_role.title}
-    )
-    return token
 
 
 @pytest_asyncio.fixture(scope="session", loop_scope="session")
