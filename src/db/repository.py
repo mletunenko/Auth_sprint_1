@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from sqlalchemy import Column, delete, select, update
 from sqlalchemy.engine import CursorResult
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm.interfaces import ORMOption
 
 import models
 
@@ -29,6 +30,19 @@ class AsyncBaseRepository:
 class AsyncSqlAlchemyRepository(AsyncBaseRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
+
+    async def get(
+        self,
+        model: Type[models.Base],
+        filter_col: Column,
+        filter_val: Any,
+        options: list[ORMOption] = None
+    ) -> models.Base | None:
+        result = await self.session.execute(
+            select(model).where(filter_col == filter_val).options(*options)
+        )
+        obj = result.scalars().first()
+        return obj
 
     async def list(self, model: Type[models.Base]) -> list[models.Base]:
         stmt = select(model)
