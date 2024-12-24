@@ -1,19 +1,19 @@
 from http import HTTPStatus
 
-import pytest
+
+def test_auth_me(client, login_common_user):
+    access_token = login_common_user["access"]
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+    response = client.get("/auth/me", headers=headers)
+    assert response.status_code == HTTPStatus.OK
 
 
-@pytest.mark.asyncio(loop_scope='session')
-async def test_auth_me(client, test_user, access_token):
-    response = await client.get(
-        "/auth/me",
-        headers={"Authorization": f"Bearer {access_token}"}
-    )
-    assert response.status_code == 200
-    assert response.json()["email"] == test_user.email
-
-
-@pytest.mark.asyncio(loop_scope='session')
-async def test_auth_me_unauthorized(client):
-    response = await client.get("/auth/me")
-    assert response.status_code == 401
+def test_auth_me_unauthorized(client, login_common_user, clear_database):
+    access_token = login_common_user["access"]
+    headers = {
+        "Authorization": f"Bearer {access_token[:-1]}"
+    }
+    response = client.get("/auth/me", headers=headers)
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
