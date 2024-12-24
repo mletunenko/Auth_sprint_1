@@ -44,13 +44,15 @@ class AsyncSqlAlchemyRepository(AsyncBaseRepository):
 
     async def update(
         self, model: Type[models.Base], filter_col: Column, filter_val: Any, update_kws: dict
-    ) -> models.Base:
+    ) -> CursorResult[Any]:
         async with self.session.begin():
             stmt = update(model).where(filter_col == filter_val).values(**update_kws)
             result = await self.session.execute(stmt)
         return result
 
-    async def delete(self, model: Type[models.Base], filter_col: Column, values: List[Any]):
+    async def delete(
+        self, model: Type[models.Base], filter_col: Column, values: List[Any]
+    ) -> CursorResult[Any]:
         async with self.session.begin():
             if len(values) == 1:
                 stmt = delete(model).where(filter_col == values[0])
