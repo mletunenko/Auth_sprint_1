@@ -2,9 +2,10 @@ import httpx
 import pytest
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
+from src.settings import pg_settings, webapp_settings
 
-BASE_URL = "http://localhost:8000"
-DATABASE_URL = "postgresql://user:password@localhost:5432/auth-test"
+BASE_URL = f"http://{webapp_settings.service_host}:{webapp_settings.service_port}"
+DATABASE_URL = str(pg_settings.pg_url_sync)
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
