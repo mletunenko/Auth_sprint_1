@@ -43,6 +43,3 @@ services:
     command: >
       /scripts/wait-for-it.sh auth-app:8000 -s -t 60 --
       pytest src
-
-volumes:
-  pg_test_data:
