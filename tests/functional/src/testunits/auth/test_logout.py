@@ -1,6 +1,4 @@
-
-
-def test_logout_success(client, clear_database, login_common_user):
+def test_logout_success(client, login_common_user):
     access_token = login_common_user["access"]
     headers = {
         "Authorization": f"Bearer {access_token}"

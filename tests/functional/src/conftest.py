@@ -1,16 +1,24 @@
-import uuid
 import datetime
+import uuid
 
 import aiohttp
 import pytest_asyncio
 from passlib.handlers.pbkdf2 import pbkdf2_sha256
 from redis.asyncio import Redis
-from sqlalchemy import MetaData, Table, Column, String, DateTime, ForeignKey, delete
+from sqlalchemy import (
+    Column,
+    DateTime,
+    ForeignKey,
+    MetaData,
+    String,
+    Table,
+    delete,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.sql import insert
 
-from src.settings import redis_settings, pg_settings, webapp_settings
+from src.settings import pg_settings, redis_settings, webapp_settings
 
 
 @pytest_asyncio.fixture(scope="session", loop_scope="session")

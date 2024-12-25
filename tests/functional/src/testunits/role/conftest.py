@@ -1,10 +1,10 @@
-import uuid
 import datetime
+import uuid
 
 import pytest_asyncio
 from async_fastapi_jwt_auth import AuthJWT
 from passlib.handlers.pbkdf2 import pbkdf2_sha256
-from sqlalchemy import Table, Column, String, Boolean, DateTime, delete, update
+from sqlalchemy import Boolean, Column, DateTime, String, Table, delete, update
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import insert, select
 

@@ -10,7 +10,7 @@ def test_auth_me(client, login_common_user):
     assert response.status_code == HTTPStatus.OK
 
 
-def test_auth_me_unauthorized(client, login_common_user, clear_database):
+def test_auth_me_unauthorized(client, login_common_user):
     access_token = login_common_user["access"]
     headers = {
         "Authorization": f"Bearer {access_token[:-1]}"

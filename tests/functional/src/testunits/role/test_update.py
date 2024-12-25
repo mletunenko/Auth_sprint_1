@@ -1,7 +1,6 @@
 from http import HTTPStatus
 
 import pytest
-import pytest_asyncio
 
 
 @pytest.mark.asyncio(loop_scope="session")
