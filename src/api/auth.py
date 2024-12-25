@@ -34,7 +34,7 @@ async def create_user(
     session: AsyncSession = Depends(get_session),
 ) -> UserBaseOut:
     existing_user = await get_user_by_email(
-        user_create,
+        user_create.email,
         session,
     )
     if existing_user:

@@ -46,9 +46,9 @@ async def validate_auth_user_login(
 
 
 async def get_user_by_email(
-        user_create: UserIn,
+        email: str,
         session: AsyncSession,
 ) -> User:
-    result = await session.execute(select(User).where(User.email == user_create.email))
+    result = await session.execute(select(User).where(User.email == email))
     existing_user = result.scalars().first()
     return existing_user
