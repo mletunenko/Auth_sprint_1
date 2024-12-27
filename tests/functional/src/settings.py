@@ -33,22 +33,20 @@ class WebAppSettings(BaseSettings):
     service_host: str = "127.0.0.1"
     service_port: int = 8000
 
+    authjwt_secret_key: str = "secret"
+    authjwt_algorithm: str = "RS256"
+
     @property
     def service_url(self) -> HttpUrl:
         return f"http://{self.service_host}:{self.service_port}/auth"
 
 
-class JwtSettings(BaseSettings):
-    authjwt_secret_key: str = "secret"
-    algorithm: str = "RS256"
-
 
 pg_settings = DbSettings(env_file_path=".env.tests-local")
 redis_settings = RedisSettings(env_file_path=".env.tests-local")
 webapp_settings = WebAppSettings(env_file_path=".env.tests-local")
-jwt_settings = JwtSettings(env_file_path=".env.tests-local")
 
 
 @AuthJWT.load_config
 def get_config():
-    return jwt_settings
+    return webapp_settings
