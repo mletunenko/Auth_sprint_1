@@ -4,12 +4,10 @@ from async_fastapi_jwt_auth.auth_jwt import AuthJWTBearer
 from fastapi import APIRouter, HTTPException, Request, Response, status
 from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
 
 from api.exceptions import Http400, Http500
 from db.redis import get_redis_connection
 from db.repository import AsyncBaseRepository
-from models import User
 from models.history import LoginHistory
 from schemas.enums import ServiceWorkResults
 from schemas.token import TokenInfo
