@@ -50,7 +50,7 @@ class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     db: DatabaseConfig
     authjwt_secret_key: str
-    authjwt_algorithm: str = "RS256"
+    algorithm: str = "RS256"
     redis: RedisConfig = RedisConfig()
 
 

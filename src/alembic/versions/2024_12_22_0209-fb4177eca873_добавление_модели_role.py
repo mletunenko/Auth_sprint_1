@@ -5,12 +5,14 @@ Revises: 72b83c97a82b
 Create Date: 2024-12-22 02:09:07.584033
 
 """
-
+from datetime import datetime, timezone
+import uuid
 from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
-
+from sqlalchemy import table, column, String, Boolean, TIMESTAMP
+from sqlalchemy.dialects.postgresql import UUID
 
 # revision identifiers, used by Alembic.
 revision: str = "fb4177eca873"
@@ -37,7 +39,16 @@ def upgrade() -> None:
     op.create_unique_constraint(op.f("uq_login_history_id"), "login_history", ["id"])
     op.add_column("users", sa.Column("role_id", sa.UUID(), nullable=True))
     op.create_foreign_key(op.f("fk_users_role_id_roles"), "users", "roles", ["role_id"], ["id"])
-    # ### end Alembic commands ###
+    roles_table = table(
+        "roles",
+        column("id", UUID),
+        column("title", String),
+        column("system_role", Boolean),
+        column("created_at", TIMESTAMP(timezone=True)),
+    )
+    op.bulk_insert(roles_table, [
+        {"id": str(uuid.uuid4()), "title": "Subscriber", "system_role": False, "created_at": datetime.now(timezone.utc)},
+    ])
 
 
 def downgrade() -> None:

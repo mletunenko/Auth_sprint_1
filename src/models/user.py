@@ -1,7 +1,7 @@
 import datetime
 from passlib.handlers.pbkdf2 import pbkdf2_sha256
 from pydantic import UUID4
-from sqlalchemy import ForeignKey, TIMESTAMP
+from sqlalchemy import ForeignKey, TIMESTAMP, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
