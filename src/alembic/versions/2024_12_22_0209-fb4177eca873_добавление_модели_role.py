@@ -47,7 +47,8 @@ def upgrade() -> None:
         column("created_at", TIMESTAMP(timezone=True)),
     )
     op.bulk_insert(roles_table, [
-        {"id": str(uuid.uuid4()), "title": "Subscriber", "system_role": False, "created_at": datetime.now(timezone.utc)},
+        {"id": str(uuid.uuid4()), "title": "subscriber", "system_role": False, "created_at": datetime.now(timezone.utc)},
+        {"id": str(uuid.uuid4()), "title": "superuser", "system_role": True, "created_at": datetime.now(timezone.utc)},
     ])
 
 
