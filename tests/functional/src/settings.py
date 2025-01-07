@@ -34,7 +34,7 @@ class WebAppSettings(BaseSettings):
     service_port: int = 8000
 
     authjwt_secret_key: str = "secret"
-    authjwt_algorithm: str = "RS256"
+    algorithm: str = "RS256"
 
     @property
     def service_url(self) -> HttpUrl:
