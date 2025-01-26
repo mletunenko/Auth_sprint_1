@@ -92,3 +92,6 @@ http://127.0.0.1/api/openapi
 
 Сервис административной панели 
 - https://github.com/mletunenko/new_admin_panel_sprint_3
+
+Сервис авторизации
+- https://github.com/mletunenko/Auth_sprint_1
