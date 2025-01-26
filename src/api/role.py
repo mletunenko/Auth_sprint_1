@@ -3,19 +3,15 @@ from fastapi import APIRouter
 from fastapi.params import Depends
 from pydantic import UUID4
 
-
 import models
 from api.exceptions import Http400, Http500
 from db.repository import AsyncBaseRepository
 from schemas.enums import ServiceWorkResults
-from schemas.role import CreateRoleDTO, ReadRoleDTO, ReadRoleDTO, UpdateRoleDTO
+from schemas.role import CreateRoleDTO, ReadRoleDTO, UpdateRoleDTO
 from services.role import RoleService
-from .dependencies import (
-    check_invalid_token,
-    check_superuser,
-    get_role_service,
-    get_sqlalchemy_repository,
-)
+
+from .dependencies import (check_invalid_token, check_superuser,
+                           get_role_service, get_sqlalchemy_repository)
 
 auth_bearer = AuthJWTBearer()
 router = APIRouter(

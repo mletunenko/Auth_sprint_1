@@ -1,5 +1,6 @@
 import logging
 from typing import Optional
+
 from redis import RedisError
 from redis.asyncio import Redis
 

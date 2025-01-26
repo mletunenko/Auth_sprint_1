@@ -5,15 +5,8 @@ import aiohttp
 import pytest_asyncio
 from passlib.handlers.pbkdf2 import pbkdf2_sha256
 from redis.asyncio import Redis
-from sqlalchemy import (
-    Column,
-    DateTime,
-    ForeignKey,
-    MetaData,
-    String,
-    Table,
-    delete,
-)
+from sqlalchemy import (Column, DateTime, ForeignKey, MetaData, String, Table,
+                        delete)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.sql import insert

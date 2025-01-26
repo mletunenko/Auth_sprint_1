@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models import User
-from schemas.user import UserAccountOut, UserLogin
+from schemas.user import UserAccountOut, UserLoginIn
 
 
 async def account_page(
@@ -21,7 +21,7 @@ async def account_page(
     if not user:
         return None
 
-    return UserLogin(
+    return UserLoginIn(
         email=user.email,
         password="***********"
     )

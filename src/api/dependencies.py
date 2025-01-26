@@ -7,8 +7,8 @@ from fastapi.params import Depends
 from redis import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db.redis import get_redis_connection
 from db.postgres import PostgresHelper, get_pg_helper
+from db.redis import get_redis_connection
 from db.repository import AsyncBaseRepository, AsyncSqlAlchemyRepository
 from schemas.enums import SystemRoles
 from services.role import RoleService

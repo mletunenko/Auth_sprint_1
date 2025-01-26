@@ -1,10 +1,8 @@
-from typing import Dict, List
-from redis.asyncio import Redis
-
 from async_fastapi_jwt_auth import AuthJWT
 from async_fastapi_jwt_auth.auth_jwt import AuthJWTBearer
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import UUID4
+from redis.asyncio import Redis
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -13,10 +11,11 @@ from sqlalchemy.future import select
 from db.redis import get_redis_connection
 from models.history import LoginHistory
 from models.user import User
-from schemas.user import UserLogin, UserUpdate
 from schemas.account import LoginHistoryResponse
+from schemas.user import UserLoginIn, UserRegisterIn
 from services.account import account_page as service_account_page
 from services.token import check_invalid_token
+
 from .dependencies import get_session
 
 router = APIRouter()
@@ -25,7 +24,7 @@ auth_bearer = AuthJWTBearer()
 
 @router.patch("/update")
 async def update_user(
-        user_update: UserUpdate,
+        user_update: UserRegisterIn,
         session: AsyncSession = Depends(get_session),
         authorize: AuthJWT = Depends(auth_bearer),
         redis: Redis = Depends(get_redis_connection)
@@ -74,12 +73,12 @@ async def update_user(
     return {"detail": "User information updated successfully"}
 
 
-@router.get("/me", response_model=UserLogin)
+@router.get("/me", response_model=UserLoginIn)
 async def account_page(
     session: AsyncSession = Depends(get_session),
     authorize: AuthJWT = Depends(auth_bearer),
     redis: Redis = Depends(get_redis_connection),
-) -> UserLogin:
+) -> UserLoginIn:
     """
     Эндпоинт для страницы Личный кабинет
     Доступен только для аутентифицированных юзеров
@@ -98,7 +97,7 @@ async def account_page(
         user_id: UUID4 = await authorize.get_jwt_subject()
     except Exception:
         raise HTTPException(status_code=401, detail="Refresh token invalid")
-    user: UserLogin = await service_account_page(user_id, session)
+    user: UserLoginIn = await service_account_page(user_id, session)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
@@ -145,7 +144,7 @@ async def get_login_history(
         login_history = result.scalars().all()
 
         history_data = [{
-            "date_time": lh.timestamp.strftime('%a %d %b %Y, %I:%M%p'),
+            "date_time": lh.timestamp.strftime("%a %d %b %Y, %I:%M%p"),
             "ip_address": lh.ip_address,
             "user-agent": lh.user_agent
         } for lh in login_history]

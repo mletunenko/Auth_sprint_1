@@ -10,13 +10,12 @@ from datetime import datetime, timezone
 from typing import Sequence, Union
 from uuid import uuid4
 
-from alembic import op
 import sqlalchemy as sa
 
-from schemas.enums import SystemRoles
-
 import models
+from alembic import op
 from core.config import settings
+from schemas.enums import SystemRoles
 
 # revision identifiers, used by Alembic.
 revision: str = "6cce8b8c000a"

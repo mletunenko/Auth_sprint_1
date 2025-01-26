@@ -1,0 +1,66 @@
+services:
+
+  auth_postgres:
+    image: postgres:16
+    env_file:
+      - postgres.env
+    networks:
+      - project_network
+    volumes:
+      - pg_data_auth:/var/lib/postgresql/data
+    ports:
+      - "30001:30001"
+
+  auth_redis:
+    image: redis:alpine
+    networks:
+      - project_network
+    ports:
+      - "6379:6379"
+
+  auth_jaeger:
+    image: jaegertracing/all-in-one:1.52.0
+    networks:
+      - project_network
+    ports:
+#      - "5775:5775/udp"
+      - "6831:6831/udp"
+#      - "6832:6832/udp"
+      - "16686:16686"
+
+  auth_app:
+    build: .
+    networks:
+      - project_network
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "
+      /scripts/wait-for-it.sh auth_postgres:30001 -s -t 60 &&
+      /scripts/wait-for-it.sh auth_redis:6379 -s -t 60 &&
+      alembic upgrade head &&
+      gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
+      "
+
+  auth_nginx:
+    image: nginx:latest
+    networks:
+      - project_network
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./src/core:/etc/nginx/conf.d:ro
+    depends_on:
+      - auth_app
+    restart: unless-stopped
+
+
+volumes:
+  pg_data_auth:
+
+networks:
+  project_network:
+    external: true

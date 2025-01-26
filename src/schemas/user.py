@@ -1,58 +1,32 @@
-from datetime import datetime
+from pydantic import UUID4, BaseModel, EmailStr
 
-from pydantic import UUID4, BaseModel, EmailStr, Field
+from schemas.token import TokenInfo
 
 
-class UserBaseOut(BaseModel):
+class UserRegisterIn(BaseModel):
     email: EmailStr
+    password: str
+    first_name: str | None = None
+    last_name: str | None = None
 
-
-class UserFullOut(UserBaseOut):
+class UserRegisterOut(BaseModel):
+    id: UUID4
+    email: EmailStr
     first_name: str | None = None
     last_name: str | None = None
 
 
-class UserIn(UserBaseOut):
-    password: str
-
-
-class UserOut(UserBaseOut):
-    id: UUID4
-    created_at: datetime
-
-
-class UserLogin(BaseModel):
+class UserLoginIn(BaseModel):
     email: EmailStr
     password: str
+
+class UserLoginOut(TokenInfo):
+    id: UUID4
+    email: EmailStr
+    role: str | None = None
 
 
 class UserAccountOut(BaseModel):
     id: UUID4
     email: EmailStr
-    password: str = '***********'
-
-
-class UserIdOut(BaseModel):
-    id: UUID4
-
-
-class UserAccountLogin(BaseModel):
-    email: EmailStr
-    password: str
-
-
-class LoginResponse(BaseModel):
-    access_token: str
-    token_type: str = "bearer"
-
-
-class UserResponse(BaseModel):
-    id: UUID4
-
-    class Config:
-        from_attributes = True
-
-
-class UserUpdate(BaseModel):
-    email: EmailStr
-    password: str
+    password: str = "***********"

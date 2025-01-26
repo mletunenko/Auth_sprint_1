@@ -4,11 +4,11 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 
 from models import User
-from schemas.user import UserIn, UserLogin
+from schemas.user import UserLoginIn, UserRegisterIn
 
 
 async def create_user(
-        user_create: UserIn,
+        user_create: UserRegisterIn,
         session: AsyncSession,
 ) -> User:
     user = User(**user_create.model_dump())
@@ -30,7 +30,7 @@ async def get_user_by_email(
 
 
 async def validate_auth_user_login(
-        user: UserLogin,
+        user: UserLoginIn,
         session: AsyncSession,
 ) -> User:
     email, password = user.email, user.password

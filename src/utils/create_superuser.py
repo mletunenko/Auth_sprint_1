@@ -7,8 +7,8 @@ import typer
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 
-from models.user import Role, User
 from core.config import settings
+from models.user import Role, User
 
 app = typer.Typer()
 

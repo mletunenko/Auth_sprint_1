@@ -2,7 +2,7 @@ from logging import config as logging_config
 from pathlib import Path
 
 from async_fastapi_jwt_auth import AuthJWT
-from pydantic import BaseModel, PostgresDsn
+from pydantic import BaseModel, Field, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from core.logger import LOGGING
@@ -15,12 +15,13 @@ logging_config.dictConfig(LOGGING)
 
 class RunConfig(BaseModel):
     host: str = "0.0.0.0"
+    # host: str = "127.0.0.1"
     port: int = 8000
 
 
 class DatabaseConfig(BaseModel):
-    url: PostgresDsn
-    sync_url: PostgresDsn
+    url: PostgresDsn = "postgresql+asyncpg://user:password@127.0.0.1:30001/auth"
+    sync_url: PostgresDsn = "postgresql+psycopg://user:password@auth_postgres:30001/auth"
     echo: bool = False
     echo_pool: bool = False
     pool_size: int = 50
@@ -40,18 +41,34 @@ class RedisConfig(BaseModel):
     port: int = 6379
 
 
+class YandexAuth(BaseModel):
+    client_id: str = "bb42c906391e4aa6ab53d4ac7359b8a4"
+    client_secret: str = "f297dc281fe44371bf812f3df0326dae"
+    redirect_uri: str = "http://127.0.0.1:8000/auth/yandex_id_login/primary_redirect"
+    oauth_url:str = "https://oauth.yandex.ru/authorize"
+    token_url: str = "https://oauth.yandex.ru/token"
+    user_info_url: str = "https://login.yandex.ru/info"
+
+
+class JaegerConfig(BaseModel):
+    host: str = "127.0.0.1"
+    agent_port: int = 6831
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=(".env.example", ".env"),
+        env_file=(".dev.env"),
         case_sensitive=False,
         env_nested_delimiter="__",
         env_prefix="APP_CONFIG__",
     )
     run: RunConfig = RunConfig()
-    db: DatabaseConfig
-    authjwt_secret_key: str
+    db: DatabaseConfig = DatabaseConfig()
+    authjwt_secret_key: str = "secret"
     algorithm: str = "RS256"
     redis: RedisConfig = RedisConfig()
+    yandex_auth: YandexAuth = YandexAuth()
+    jaeger: JaegerConfig = JaegerConfig()
 
 
 settings = Settings()

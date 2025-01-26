@@ -6,5 +6,5 @@ __all__ = (
 )
 
 from .base import Base
-from .user import User, Role
 from .history import LoginHistory
+from .user import Role, User
