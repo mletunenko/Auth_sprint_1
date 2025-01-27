@@ -55,6 +55,11 @@ class JaegerConfig(BaseModel):
     agent_port: int = 6831
 
 
+class RateLimiter(BaseModel):
+    seconds: int = 2
+    times: int = 20
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".dev.env"),
@@ -69,6 +74,7 @@ class Settings(BaseSettings):
     redis: RedisConfig = RedisConfig()
     yandex_auth: YandexAuth = YandexAuth()
     jaeger: JaegerConfig = JaegerConfig()
+    rate_limiter: RateLimiter = RateLimiter()
 
 
 settings = Settings()

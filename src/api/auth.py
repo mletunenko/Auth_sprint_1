@@ -130,7 +130,7 @@ async def refresh(
 @router.post("/logout")
 async def logout(
     authorize: AuthJWT = Depends(auth_bearer),
-    redis: Redis = Depends(get_redis_connection)
+    redis: Redis = Depends(get_redis_connection),
 ) -> Response:
     try:
         await authorize.jwt_required()

@@ -4,8 +4,11 @@ from typing import AsyncGenerator
 
 import uvicorn
 from async_fastapi_jwt_auth.exceptions import AuthJWTException
-from fastapi import APIRouter, FastAPI, Request, status
+from fastapi import APIRouter, FastAPI, Request, status, Depends
 from fastapi.responses import JSONResponse, ORJSONResponse
+from fastapi_limiter import FastAPILimiter
+from fastapi_limiter.depends import RateLimiter
+
 from opentelemetry import trace
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
@@ -40,6 +43,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         pool_size=settings.db.pool_size,
         max_overflow=settings.db.max_overflow,
     )
+    await FastAPILimiter.init(redis.redis_client)
     yield
     # shutdown
     await postgres.pg_helper.dispose()
@@ -60,6 +64,7 @@ def configure_tracer() -> None:
 configure_tracer()
 app = FastAPI(
     lifespan=lifespan,
+    dependencies=[Depends(RateLimiter(times=settings.rate_limiter.times, seconds=settings.rate_limiter.seconds))],
 )
 
 FastAPIInstrumentor.instrument_app(app)
