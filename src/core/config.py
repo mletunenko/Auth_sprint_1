@@ -73,6 +73,7 @@ class Settings(BaseSettings):
     algorithm: str = "RS256"
     redis: RedisConfig = RedisConfig()
     yandex_auth: YandexAuth = YandexAuth()
+    enable_tracer: bool = True
     jaeger: JaegerConfig = JaegerConfig()
     rate_limiter: RateLimiter = RateLimiter()
 
