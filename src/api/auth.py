@@ -165,16 +165,20 @@ async def supervised_login(
 
     return token_pair
 
-@router.get("/yandex_id_login")
-async def yandex_id_login() -> RedirectResponse:
-    """Перенаправляет пользователя на страницу авторизации Яндекс"""
-    params = {
-        "response_type": "code",
-        "client_id": settings.yandex_auth.client_id,
-        "redirect_uri": settings.yandex_auth.redirect_uri,
-    }
-    redirect_url = f"{settings.yandex_auth.oauth_url}?{httpx.QueryParams(params)}"
-    return RedirectResponse(url=redirect_url)
+@router.get("/social_auth")
+async def social_auth(
+        provider:str,
+) -> RedirectResponse:
+    if provider == 'yandex':
+        """Перенаправляет пользователя на страницу авторизации Яндекс"""
+        params = {
+            "response_type": "code",
+            "client_id": settings.yandex_auth.client_id,
+            "redirect_uri": settings.yandex_auth.redirect_uri,
+        }
+        redirect_url = f"{settings.yandex_auth.oauth_url}?{httpx.QueryParams(params)}"
+        return RedirectResponse(url=redirect_url)
+    raise HTTPException(status_code=400, detail="Неизвестный провайдер")
 
 @router.get("/yandex_id_login/primary_redirect")
 async def yandex_id_redirect_redirect(request: Request,) -> RedirectResponse:
