@@ -27,6 +27,6 @@ class UserLoginOut(TokenInfo):
 
 
 class UserAccountOut(BaseModel):
-    id: UUID4
     email: EmailStr
-    password: str = "***********"
+    first_name: str | None = None
+    last_name: str | None = None

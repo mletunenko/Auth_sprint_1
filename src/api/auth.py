@@ -100,7 +100,6 @@ async def login(
     session: AsyncSession = Depends(get_session),
     authorize: AuthJWT = Depends(auth_bearer),
 ) -> UserLoginOut:
-    await authorize.get_raw_jwt()
     validated_user = await validate_auth_user_login(user, session)
     return await handle_login(
         validated_user,
@@ -212,9 +211,6 @@ async def yandex_id_redirect(
         await redis_con.set(f"yandex_auth_code:{code}", 1, ex=5 * 60)
         await asyncio.sleep(10)
         raise HTTPException(status_code=400, detail="YANDEX THROTTLE")
-
-    cid = request.query_params.get("cid")
-
 
     async with httpx.AsyncClient() as client:
         url = settings.yandex_auth.token_url

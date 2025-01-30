@@ -33,6 +33,9 @@ async def validate_auth_user_login(
         user: UserLoginIn,
         session: AsyncSession,
 ) -> User:
+    """
+    Проверка, что юзер существует в БД и указан правильный пароль
+    """
     email, password = user.email, user.password
     unauth_exc = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

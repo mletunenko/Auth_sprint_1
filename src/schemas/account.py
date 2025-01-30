@@ -3,13 +3,19 @@ from typing import Any, Dict, List
 from pydantic import BaseModel
 
 
-class Meta(BaseModel):
+class HistoryMeta(BaseModel):
     current_page: int
     page_size: int
     total_count: int
     total_pages: int
 
 
-class LoginHistoryResponse(BaseModel):
-    data: List[Dict[str, str]]
-    meta: Meta
+class HistoryItem(BaseModel):
+    date_time: str
+    ip_address: str
+    user_agent: str    
+
+
+class LoginHistoryOut(BaseModel):
+    data: List[HistoryItem]
+    meta: HistoryMeta
