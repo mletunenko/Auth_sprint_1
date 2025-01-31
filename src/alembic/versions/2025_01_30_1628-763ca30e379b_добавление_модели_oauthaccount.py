@@ -5,12 +5,14 @@ Revises: 7830788a5ff2
 Create Date: 2025-01-30 16:28:28.849913
 
 """
-
+import uuid
+from datetime import datetime, timezone
 from typing import Sequence, Union
+from sqlalchemy.dialects.postgresql import UUID
 
 from alembic import op
 import sqlalchemy as sa
-
+from sqlalchemy import table, column, String, TIMESTAMP
 
 # revision identifiers, used by Alembic.
 revision: str = "763ca30e379b"
@@ -29,6 +31,16 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id", name=op.f("pk_oauth_providers")),
         sa.UniqueConstraint("id", name=op.f("uq_oauth_providers_id")),
     )
+    oauth_providers_table = table(
+        "oauth_providers",
+        column("id", UUID),
+        column("name", String),
+        column("created_at", TIMESTAMP(timezone=True)),
+    )
+    op.bulk_insert(oauth_providers_table, [
+        {"id": str(uuid.uuid4()), "name": "yandex", "created_at": datetime.now(timezone.utc)},
+    ])
+
     op.create_table(
         "oauth_accounts",
         sa.Column("user_id", sa.UUID(), nullable=False),
