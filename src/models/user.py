@@ -2,7 +2,7 @@ import datetime
 
 from passlib.handlers.pbkdf2 import pbkdf2_sha256
 from pydantic import UUID4
-from sqlalchemy import TIMESTAMP, ForeignKey, func, Table, Column, String, Integer
+from sqlalchemy import TIMESTAMP, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
@@ -19,7 +19,7 @@ class User(Base):
     role_id: Mapped[UUID4 | None] = mapped_column(ForeignKey("roles.id", ondelete="SET NULL"))
     role: Mapped["Role"] = relationship(lazy="joined")
 
-    oauth_accounts = relationship('OAuthAccount', back_populates='user', cascade='all, delete-orphan')
+    oauth_accounts = relationship("OAuthAccount", back_populates="user", cascade="all, delete-orphan")
 
     updated_at: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP(timezone=True),

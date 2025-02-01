@@ -10,8 +10,12 @@ from schemas.enums import ServiceWorkResults
 from schemas.role import CreateRoleDTO, ReadRoleDTO, UpdateRoleDTO
 from services.role import RoleService
 
-from .dependencies import (check_invalid_token, check_superuser,
-                           get_role_service, get_sqlalchemy_repository)
+from .dependencies import (
+    check_invalid_token,
+    check_superuser,
+    get_role_service,
+    get_sqlalchemy_repository,
+)
 
 auth_bearer = AuthJWTBearer()
 router = APIRouter(

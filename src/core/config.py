@@ -2,7 +2,7 @@ from logging import config as logging_config
 from pathlib import Path
 
 from async_fastapi_jwt_auth import AuthJWT
-from pydantic import BaseModel, Field, PostgresDsn
+from pydantic import BaseModel, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from core.logger import LOGGING

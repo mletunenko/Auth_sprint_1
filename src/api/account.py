@@ -7,8 +7,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.redis import get_redis_connection
 from schemas.account import LoginHistoryOut
-from schemas.user import UserLoginIn, UserRegisterIn, UserAccountOut
-from services.account import account_page as service_account_page, get_login_history, update_user_data
+from schemas.user import UserAccountOut, UserLoginIn, UserRegisterIn
+from services.account import account_page as service_account_page
+from services.account import get_login_history, update_user_data
 from services.token import check_invalid_token
 
 from .dependencies import get_session

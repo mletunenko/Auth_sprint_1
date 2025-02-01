@@ -1,11 +1,11 @@
 from fastapi import HTTPException
 from pydantic import UUID4
-from sqlalchemy import select, func
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models import User, LoginHistory
-from schemas.account import HistoryItem, LoginHistoryOut, HistoryMeta
+from models import LoginHistory, User
+from schemas.account import HistoryItem, HistoryMeta, LoginHistoryOut
 from schemas.user import UserAccountOut, UserRegisterIn
 from services.users import get_user_by_email
 

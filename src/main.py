@@ -4,19 +4,16 @@ from typing import AsyncGenerator
 
 import uvicorn
 from async_fastapi_jwt_auth.exceptions import AuthJWTException
-from fastapi import APIRouter, FastAPI, Request, status, Depends
+from fastapi import APIRouter, Depends, FastAPI, Request, status
 from fastapi.responses import JSONResponse, ORJSONResponse
 from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter
-
 from opentelemetry import trace
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import (BatchSpanProcessor,
-                                            ConsoleSpanExporter)
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from redis.asyncio import Redis
-from starlette.middleware.cors import CORSMiddleware
 
 from api.account import router as account_router
 from api.auth import router as auth_router

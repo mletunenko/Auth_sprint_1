@@ -1,6 +1,6 @@
 from pydantic import UUID4
-from sqlalchemy import ForeignKey, String
-from sqlalchemy.orm import mapped_column, Mapped, relationship
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
 
@@ -18,9 +18,10 @@ class OAuthAccount(Base):
     __tablename__ = "oauth_accounts"
 
     user_id: Mapped[UUID4] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
-    provider_id: Mapped[[UUID4]] = mapped_column(ForeignKey("oauth_providers.id", ondelete="CASCADE"))
-    access_token: Mapped[str] = mapped_column(nullable=False)
-    refresh_token: Mapped[str] = mapped_column(nullable=False)
+    provider_id: Mapped[UUID4] = mapped_column(ForeignKey("oauth_providers.id", ondelete="CASCADE"))
+    provider_user_id: Mapped[str] = mapped_column(nullable=True)
+    access_token: Mapped[str] = mapped_column(nullable=True)
+    refresh_token: Mapped[str] = mapped_column(nullable=True)
     expires_at: Mapped[int] = mapped_column(nullable=True)
 
-    user = relationship('User', back_populates='oauth_accounts')
+    user = relationship("User", back_populates="oauth_accounts")

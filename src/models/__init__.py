@@ -9,5 +9,5 @@ __all__ = (
 
 from .base import Base
 from .history import LoginHistory
+from .oauth import OAuthAccount, OAuthProvider
 from .user import Role, User
-from .oauth import OAuthProvider, OAuthAccount

@@ -18,16 +18,23 @@ from db.repository import AsyncBaseRepository
 from models.history import LoginHistory
 from schemas.enums import ServiceWorkResults
 from schemas.token import TokenInfo
-from schemas.user import (UserLoginIn, UserLoginOut, UserRegisterIn,
-                          UserRegisterOut)
-from services.token import (authorize_by_user_id, check_invalid_token,
-                            invalidate_token)
+from schemas.user import UserLoginIn, UserLoginOut, UserRegisterIn, UserRegisterOut
+from services.oauth import (
+    get_provider_by_name,
+    get_user_by_provider_user_id,
+    save_oauth_account,
+)
+from services.token import (
+    authorize_by_user_id,
+    check_invalid_token,
+    invalidate_token,
+)
 from services.users import create_user as services_create_user
 from services.users import get_user_by_email, validate_auth_user_login
+from utils.email_generator import generate_email
 
 from .dependencies import check_invalid_token as check_invalid_token_depcy
-from .dependencies import (check_superuser, get_session,
-                           get_sqlalchemy_repository)
+from .dependencies import check_superuser, get_session, get_sqlalchemy_repository
 
 router = APIRouter()
 auth_bearer = AuthJWTBearer()
@@ -168,7 +175,7 @@ async def supervised_login(
 async def social_auth(
         provider:str,
 ) -> RedirectResponse:
-    if provider == 'yandex':
+    if provider == "yandex":
         """Перенаправляет пользователя на страницу авторизации Яндекс"""
         params = {
             "response_type": "code",
@@ -199,6 +206,7 @@ async def yandex_id_redirect(
     Обрабатывает callback, создает пользователя в БД, если он не существует,
     и возвращает информацию о входе.
     """
+    user = None
     code = request.query_params.get("code")
     if not code:
         raise HTTPException(status_code=400, detail="Код авторизации отсутствует")
@@ -243,23 +251,38 @@ async def yandex_id_redirect(
             raise HTTPException(status_code=400, detail="Не удалось получить данные о пользователе")
 
         user_data =data_response.json()
-        emails = user_data.get("emails", None)
-        if not emails:
-            raise HTTPException(status_code=400, detail="Не удалось получить email пользователя")
-        email = emails[0]
-        user = await get_user_by_email(
-            email,
-            session,
-        )
+
+        email = user_data["default_email"]
+        if email:
+            user = await get_user_by_email(
+                email,
+                session
+            )
+        if not user:
+            user = await get_user_by_provider_user_id(
+                user_data["id"],
+                session,
+            )
         if not user:
             user_create = UserRegisterIn(
-                email=email,
+                email=user_data.get("default_email", generate_email()),
                 password=generate_password()
             )
             user = await services_create_user(
                 user_create=user_create,
                 session=session,
             )
+
+        yandex_provider = await get_provider_by_name("yandex", session)
+
+        await save_oauth_account(
+            user.id,
+            yandex_provider.id,
+            user_data["id"],
+            token_data,
+            session,
+        )
+
         result = await handle_login(
             user,
             request,
