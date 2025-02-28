@@ -9,11 +9,12 @@ Create Date: 2025-02-01 08:51:46.626509
 import uuid
 from datetime import datetime, timezone
 from typing import Sequence, Union
+
+import sqlalchemy as sa
+from sqlalchemy import TIMESTAMP, String, column, table
 from sqlalchemy.dialects.postgresql import UUID
 
 from alembic import op
-import sqlalchemy as sa
-from sqlalchemy import table, column, String, TIMESTAMP
 
 # revision identifiers, used by Alembic.
 revision: str = "8483a86bc196"

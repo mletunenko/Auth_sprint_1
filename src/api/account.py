@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.redis import get_redis_connection
 from schemas.account import LoginHistoryOut
-from schemas.user import UserAccountOut, UserLoginIn, UserRegisterIn
+from schemas.user import UserAccountOut, UserRegisterIn
 from services.account import account_page as service_account_page
 from services.account import get_login_history, update_user_data
 from services.token import check_invalid_token
@@ -69,7 +69,7 @@ async def account_page(
         user_id: UUID4 = await authorize.get_jwt_subject()
     except Exception:
         raise HTTPException(status_code=401, detail="Refresh token invalid")
-    user: UserLoginIn = await service_account_page(user_id, session)
+    user = await service_account_page(user_id, session)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user

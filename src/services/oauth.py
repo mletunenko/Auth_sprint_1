@@ -80,7 +80,7 @@ async def get_oauth_account(
 async def get_user_by_provider_user_id(
         provider_user_id: str,
         session: AsyncSession,
-) -> User:
+) -> User | None:
     result = await session.execute(
         select(User)
         .join(OAuthAccount)

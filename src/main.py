@@ -46,15 +46,14 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     await postgres.pg_helper.dispose()
 
 def configure_tracer() -> None:
-    trace.set_tracer_provider(TracerProvider())
-    trace.get_tracer_provider().add_span_processor(
-        BatchSpanProcessor(
-            JaegerExporter(
-                agent_host_name=settings.jaeger.host,
-                agent_port=settings.jaeger.agent_port,
-            )
-        )
+    provider = TracerProvider()
+    trace.set_tracer_provider(provider)
+    jaeger_exporter = JaegerExporter(
+        agent_host_name=settings.jaeger.host,
+        agent_port=settings.jaeger.agent_port,
     )
+    span_processor = BatchSpanProcessor(jaeger_exporter)
+    provider.add_span_processor(span_processor)
     # Чтобы видеть трейсы в консоли
     # trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(ConsoleSpanExporter()))
 

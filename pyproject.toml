@@ -1,0 +1,23 @@
+[tool.ruff]
+line-length = 120
+exclude = [
+    "src/alembic/",
+    "tests/",
+]
+
+[tool.ruff.lint]
+select = ["I", "Q", "E", "ANN", "F"]
+ignore = ["ANN201", "ANN001", "ANN401",  "ANN002", "ANN003", "E712", "E721"]
+
+[tool.mypy]
+[[tool.mypy.overrides]]
+module = "kafka.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "passlib.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "async_fastapi_jwt_auth.*"
+ignore_missing_imports = true

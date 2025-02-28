@@ -4,8 +4,7 @@ from logging import getLogger
 import httpx
 from async_fastapi_jwt_auth import AuthJWT
 from async_fastapi_jwt_auth.auth_jwt import AuthJWTBearer
-from fastapi import APIRouter, HTTPException, Request, Response, status
-from fastapi.params import Depends
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from passlib.utils import generate_password
 from redis.asyncio import Redis
@@ -15,20 +14,13 @@ from api.exceptions import Http400, Http500
 from core.config import settings
 from db.redis import get_redis_connection
 from db.repository import AsyncBaseRepository
+from models import User
 from models.history import LoginHistory
 from schemas.enums import ServiceWorkResults
 from schemas.token import TokenInfo
 from schemas.user import UserLoginIn, UserLoginOut, UserRegisterIn, UserRegisterOut
-from services.oauth import (
-    get_provider_by_name,
-    get_user_by_provider_user_id,
-    save_oauth_account,
-)
-from services.token import (
-    authorize_by_user_id,
-    check_invalid_token,
-    invalidate_token,
-)
+from services.oauth import get_provider_by_name, get_user_by_provider_user_id, save_oauth_account
+from services.token import authorize_by_user_id, check_invalid_token, invalidate_token
 from services.users import create_user as services_create_user
 from services.users import get_user_by_email, validate_auth_user_login
 from utils.email_generator import generate_email
@@ -43,7 +35,7 @@ logger = getLogger(__name__)
 
 
 async def handle_login(
-    user: UserLoginIn,
+    user: User,
     request: Request,
     session: AsyncSession,
     authorize: AuthJWT,
@@ -97,6 +89,10 @@ async def create_user(
         user_create=user_create,
         session=session,
     )
+    existing_user = await get_user_by_email(
+        user_create.email,
+        session,
+    )
     return user
 
 
@@ -137,14 +133,14 @@ async def refresh(
 async def logout(
     authorize: AuthJWT = Depends(auth_bearer),
     redis: Redis = Depends(get_redis_connection),
-) -> Response:
+) -> dict:
     try:
         await authorize.jwt_required()
         token = await authorize.get_raw_jwt()
         if await check_invalid_token(token, redis):
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid")
         if await invalidate_token(token, redis):
-            return Response(status_code=200)
+            return {"detail" : "Действие успешно выполнено"}
     except ConnectionError:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Request cannot be completed"
@@ -161,7 +157,7 @@ async def supervised_login(
     user_id: str,
     repository: AsyncBaseRepository = Depends(get_sqlalchemy_repository),
     authorize: AuthJWT = Depends(auth_bearer)
-) -> TokenInfo:
+) -> TokenInfo | None:
     result, token_pair, res_msg = await authorize_by_user_id(user_id, authorize, repository)
 
     if result is ServiceWorkResults.ERROR:
@@ -195,8 +191,6 @@ async def yandex_id_redirect_redirect(request: Request,) -> RedirectResponse:
 
 @router.get("/yandex_id_login/redirect")
 async def yandex_id_redirect(
-        # code: str,
-        # cid: str,
         request: Request,
         session: AsyncSession = Depends(get_session),
         authorize: AuthJWT = Depends(auth_bearer),

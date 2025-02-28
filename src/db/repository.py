@@ -28,7 +28,7 @@ class AsyncBaseRepository:
 
 
 class AsyncSqlAlchemyRepository(AsyncBaseRepository):
-    def __init__(self, session: AsyncSession):
+    def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
     async def get(

@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 redis_client: Optional["Redis"] = None
 
 
-async def get_redis_connection() -> Redis:
+async def get_redis_connection() -> Redis | None:
     try:
         return redis_client
     except RedisError as e:

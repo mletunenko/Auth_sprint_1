@@ -1,9 +1,8 @@
-from typing import AsyncGenerator
+from typing import Any, AsyncGenerator
 
 import backoff
 from async_fastapi_jwt_auth import AuthJWT
-from fastapi import HTTPException, status
-from fastapi.params import Depends
+from fastapi import Depends, HTTPException, status
 from redis import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -44,7 +43,7 @@ async def get_token_сlaims(authjwt: AuthJWT = Depends()):
 
 @backoff.on_exception(backoff.expo, ConnectionError, max_time=15)
 async def check_invalid_token(
-    token_claims: dict = Depends(get_token_сlaims),
+    token_claims: dict[Any, Any] = Depends(get_token_сlaims),
     redis_client: Redis = Depends(get_redis_connection)
 ) -> bool:
     jti = token_claims["jti"]
@@ -57,7 +56,9 @@ async def check_invalid_token(
         )
 
 
-async def check_superuser(token_claims: dict = Depends(get_token_сlaims)):
+async def check_superuser(
+        token_claims: dict[Any, Any] = Depends(get_token_сlaims)
+):
     user_role = token_claims.get("roles")
 
     if user_role != SystemRoles.SUPERUSER:

@@ -1,7 +1,6 @@
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import joinedload
 
 from models import User
 from schemas.user import UserLoginIn, UserRegisterIn
@@ -15,17 +14,6 @@ async def create_user(
     user.set_password(user_create.password)
     session.add(user)
     await session.commit()
-    return user
-
-
-async def get_user_by_email(
-        email: str,
-        session: AsyncSession,
-) -> User | None:
-    result = await session.execute(
-        select(User).where(User.email == email).options(joinedload(User.role))
-    )
-    user = result.scalars().first()
     return user
 
 
@@ -51,7 +39,7 @@ async def validate_auth_user_login(
 async def get_user_by_email(
         email: str,
         session: AsyncSession,
-) -> User:
+) -> User | None:
     result = await session.execute(select(User).where(User.email == email))
     existing_user = result.scalars().first()
     return existing_user

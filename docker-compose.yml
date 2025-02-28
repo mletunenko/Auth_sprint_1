@@ -10,6 +10,9 @@ services:
       - pg_data_auth:/var/lib/postgresql/data
     ports:
       - "30001:30001"
+    command:
+      ["postgres", "-c", "log_statement=all"]
+
 
   auth_redis:
     image: redis:alpine

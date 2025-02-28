@@ -1,15 +1,11 @@
 from typing import AsyncGenerator, Optional
 
-from sqlalchemy.ext.asyncio import (
-    AsyncSession,
-    async_sessionmaker,
-    create_async_engine,
-)
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 pg_helper: Optional["PostgresHelper"] = None
 
 
-async def get_pg_helper() -> "PostgresHelper":
+async def get_pg_helper() -> "PostgresHelper" | None:
     return pg_helper
 
 
