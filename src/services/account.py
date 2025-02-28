@@ -13,7 +13,7 @@ from services.users import get_user_by_email
 async def account_page(
     user_id: UUID4,
     session: AsyncSession
-) -> UserAccountOut:
+) -> UserAccountOut | None:
     """
     Метод возвращяет данные по юзеру по его id
     """
