@@ -9,6 +9,7 @@ class UserRegisterIn(BaseModel):
     first_name: str | None = None
     last_name: str | None = None
 
+
 class UserRegisterOut(BaseModel):
     id: UUID4
     email: EmailStr
