@@ -21,6 +21,7 @@ class UserLoginIn(BaseModel):
     email: EmailStr
     password: str
 
+
 class UserLoginOut(TokenInfo):
     id: UUID4
     email: EmailStr
