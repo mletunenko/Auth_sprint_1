@@ -89,10 +89,6 @@ async def create_user(
         user_create=user_create,
         session=session,
     )
-    existing_user = await get_user_by_email(
-        user_create.email,
-        session,
-    )
     return user
 
 
