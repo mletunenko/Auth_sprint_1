@@ -15,7 +15,6 @@ logging_config.dictConfig(LOGGING)
 
 class RunConfig(BaseModel):
     host: str = "0.0.0.0"
-    # host: str = "127.0.0.1"
     port: int = 8000
 
 
@@ -70,7 +69,7 @@ class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     db: DatabaseConfig = DatabaseConfig()
     authjwt_secret_key: str = "secret"
-    algorithm: str = "RS256"
+    algorithm: str = "HS256"
     redis: RedisConfig = RedisConfig()
     yandex_auth: YandexAuth = YandexAuth()
     enable_tracer: bool = True

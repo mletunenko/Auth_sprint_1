@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 pg_helper: Optional["PostgresHelper"] = None
 
 
-async def get_pg_helper() -> "PostgresHelper" | None:
+async def get_pg_helper() -> "PostgresHelper":
     return pg_helper
 
 
