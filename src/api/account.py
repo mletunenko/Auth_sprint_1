@@ -20,10 +20,10 @@ auth_bearer = AuthJWTBearer()
 
 @router.patch("/update")
 async def update_user(
-        user_update: UserRegisterIn,
-        session: AsyncSession = Depends(get_session),
-        authorize: AuthJWT = Depends(auth_bearer),
-        redis: Redis = Depends(get_redis_connection)
+    user_update: UserRegisterIn,
+    session: AsyncSession = Depends(get_session),
+    authorize: AuthJWT = Depends(auth_bearer),
+    redis: Redis = Depends(get_redis_connection),
 ) -> dict:
     """
     Эндпоинт для изменения информации о юзере
@@ -31,10 +31,7 @@ async def update_user(
     await authorize.jwt_required()
     token = await authorize.get_raw_jwt()
     if await check_invalid_token(token, redis):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token invalid"
-        )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid")
 
     user_id: UUID4 = await authorize.get_jwt_subject()
 
@@ -61,10 +58,7 @@ async def account_page(
 
         token = await authorize.get_raw_jwt()
         if await check_invalid_token(token, redis):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Token invalid"
-            )
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid")
 
         user_id: UUID4 = await authorize.get_jwt_subject()
     except Exception:
@@ -77,13 +71,11 @@ async def account_page(
 
 @router.get("/history", response_model=LoginHistoryOut)
 async def get_history(
-        authorize: AuthJWT = Depends(auth_bearer),
-        session: AsyncSession = Depends(get_session),
-        redis: Redis = Depends(get_redis_connection),
-        page: int = Query(1, ge=1, description="Номер страницы"),
-        page_size: int = Query(
-            10, ge=1, le=100, description="Размер страницы"
-        ),
+    authorize: AuthJWT = Depends(auth_bearer),
+    session: AsyncSession = Depends(get_session),
+    redis: Redis = Depends(get_redis_connection),
+    page: int = Query(1, ge=1, description="Номер страницы"),
+    page_size: int = Query(10, ge=1, le=100, description="Размер страницы"),
 ) -> LoginHistoryOut:
     """
     Эндпоинт для просмотра истории входов пользователя
@@ -92,17 +84,9 @@ async def get_history(
 
     token = await authorize.get_raw_jwt()
     if await check_invalid_token(token, redis):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token invalid"
-        )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid")
 
     user_id = await authorize.get_jwt_subject()
 
-    history = await get_login_history(
-        user_id,
-        page,
-        page_size,
-        session
-    )
+    history = await get_login_history(user_id, page, page_size, session)
     return history

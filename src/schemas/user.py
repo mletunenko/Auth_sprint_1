@@ -1,3 +1,5 @@
+from datetime import date
+
 from pydantic import UUID4, BaseModel, EmailStr
 
 from schemas.token import TokenInfo
@@ -8,6 +10,7 @@ class UserRegisterIn(BaseModel):
     password: str
     first_name: str | None = None
     last_name: str | None = None
+    birth_date: date | None = None
 
 
 class UserRegisterOut(BaseModel):
@@ -15,6 +18,7 @@ class UserRegisterOut(BaseModel):
     email: EmailStr
     first_name: str | None = None
     last_name: str | None = None
+    birth_date: date | None = None
 
 
 class UserLoginIn(BaseModel):
@@ -32,3 +36,4 @@ class UserAccountOut(BaseModel):
     email: EmailStr
     first_name: str | None = None
     last_name: str | None = None
+    birth_date: date | None = None

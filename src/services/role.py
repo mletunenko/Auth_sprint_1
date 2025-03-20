@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 
 class RoleService:
-
     @staticmethod
     async def create_role(
         role_dto: CreateRoleDTO, repository: AsyncBaseRepository
@@ -33,9 +32,7 @@ class RoleService:
             return ServiceWorkResults.ERROR, None, None
 
     @staticmethod
-    async def remove_role(
-        role_id: UUID4, repository: AsyncBaseRepository
-    ) -> tuple[ServiceWorkResults, str | None]:
+    async def remove_role(role_id: UUID4, repository: AsyncBaseRepository) -> tuple[ServiceWorkResults, str | None]:
         try:
             result = await repository.delete(models.Role, models.Role.id, [role_id])
             if result.rowcount == 0:
@@ -85,9 +82,7 @@ class RoleService:
         role_id: UUID4, user_id: UUID4, repository: AsyncBaseRepository
     ) -> tuple[ServiceWorkResults, str | None]:
         try:
-            await repository.update(
-                models.User, models.User.id, user_id, {models.User.role_id.name: role_id}
-            )
+            await repository.update(models.User, models.User.id, user_id, {models.User.role_id.name: role_id})
             return ServiceWorkResults.SUCCESS, "ok"
         except sa_exc.NoResultFound as e:
             logger.error(f"NoResultFound: {e}")
@@ -100,13 +95,9 @@ class RoleService:
             return ServiceWorkResults.ERROR, None
 
     @staticmethod
-    async def revoke_role(
-        user_id: UUID4, repository: AsyncBaseRepository
-    ) -> tuple[ServiceWorkResults, str | None]:
+    async def revoke_role(user_id: UUID4, repository: AsyncBaseRepository) -> tuple[ServiceWorkResults, str | None]:
         try:
-            await repository.update(
-                models.User, models.User.id, user_id, {models.User.role_id.name: None}
-            )
+            await repository.update(models.User, models.User.id, user_id, {models.User.role_id.name: None})
             return ServiceWorkResults.SUCCESS, "ok"
         except sa_exc.NoResultFound as e:
             logger.error(f"NoResultFound: {e}")

@@ -7,8 +7,8 @@ from schemas.user import UserLoginIn, UserRegisterIn
 
 
 async def create_user(
-        user_create: UserRegisterIn,
-        session: AsyncSession,
+    user_create: UserRegisterIn,
+    session: AsyncSession,
 ) -> User:
     user = User(**user_create.model_dump())
     user.set_password(user_create.password)
@@ -18,17 +18,14 @@ async def create_user(
 
 
 async def validate_auth_user_login(
-        user: UserLoginIn,
-        session: AsyncSession,
+    user: UserLoginIn,
+    session: AsyncSession,
 ) -> User:
     """
     Проверка, что юзер существует в БД и указан правильный пароль
     """
     email, password = user.email, user.password
-    unauth_exc = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="invalid username or password"
-    )
+    unauth_exc = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid username or password")
     if not (user := await get_user_by_email(email, session=session)):
         raise unauth_exc
     if not user.check_password(password):
@@ -37,8 +34,8 @@ async def validate_auth_user_login(
 
 
 async def get_user_by_email(
-        email: str,
-        session: AsyncSession,
+    email: str,
+    session: AsyncSession,
 ) -> User | None:
     result = await session.execute(select(User).where(User.email == email))
     existing_user = result.scalars().first()

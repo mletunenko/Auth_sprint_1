@@ -18,6 +18,7 @@ from redis.asyncio import Redis
 from api.account import router as account_router
 from api.auth import router as auth_router
 from api.role import router as role_router
+from api.users import router as users_router
 from core.config import settings
 from db import postgres, redis
 
@@ -25,14 +26,13 @@ combined_router = APIRouter()
 combined_router.include_router(auth_router)
 combined_router.include_router(account_router)
 combined_router.include_router(role_router, prefix="/role")
+combined_router.include_router(users_router)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # startup
-    redis.redis_client = Redis(
-        host=settings.redis.url, port=settings.redis.port
-    )
+    redis.redis_client = Redis(host=settings.redis.url, port=settings.redis.port)
     postgres.pg_helper = postgres.PostgresHelper(
         url=str(settings.db.url),
         echo=settings.db.echo,
@@ -45,6 +45,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # shutdown
     await postgres.pg_helper.dispose()
 
+
 def configure_tracer() -> None:
     provider = TracerProvider()
     trace.set_tracer_provider(provider)
@@ -56,6 +57,7 @@ def configure_tracer() -> None:
     provider.add_span_processor(span_processor)
     # Чтобы видеть трейсы в консоли
     # trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(ConsoleSpanExporter()))
+
 
 if settings.enable_tracer:
     configure_tracer()
@@ -71,23 +73,18 @@ FastAPIInstrumentor.instrument_app(app)
 @app.middleware("http")
 async def before_request(request: Request, call_next):
     response = await call_next(request)
-    request_id = request.headers.get("X-Request-Id",  str(uuid.uuid4()))
+    request_id = request.headers.get("X-Request-Id", str(uuid.uuid4()))
     if not request_id:
         return ORJSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"detail": "X-Request-Id is required"})
     return response
 
 
-app.include_router(
-    combined_router,
-    prefix="/auth"
-)
+app.include_router(combined_router, prefix="/auth")
 
 
 @app.exception_handler(AuthJWTException)
 def authjwt_exception_handler(request: Request, exc: AuthJWTException):
-    return JSONResponse(
-        status_code=exc.status_code, content={"detail": exc.message}
-    )
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
 
 
 if __name__ == "__main__":

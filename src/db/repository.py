@@ -10,7 +10,6 @@ import models
 
 
 class AsyncBaseRepository:
-
     async def get(self, *args, **kwargs) -> BaseModel:
         raise NotImplementedError
 
@@ -32,15 +31,9 @@ class AsyncSqlAlchemyRepository(AsyncBaseRepository):
         self.session = session
 
     async def get(
-        self,
-        model: Type[models.Base],
-        filter_col: Column,
-        filter_val: Any,
-        options: list[ORMOption] = None
+        self, model: Type[models.Base], filter_col: Column, filter_val: Any, options: list[ORMOption] = None
     ) -> models.Base | None:
-        result = await self.session.execute(
-            select(model).where(filter_col == filter_val).options(*options)
-        )
+        result = await self.session.execute(select(model).where(filter_col == filter_val).options(*options))
         obj = result.scalars().first()
         return obj
 
@@ -64,9 +57,7 @@ class AsyncSqlAlchemyRepository(AsyncBaseRepository):
             result = await self.session.execute(stmt)
         return result
 
-    async def delete(
-        self, model: Type[models.Base], filter_col: Column, values: List[Any]
-    ) -> CursorResult[Any]:
+    async def delete(self, model: Type[models.Base], filter_col: Column, values: List[Any]) -> CursorResult[Any]:
         async with self.session.begin():
             if len(values) == 1:
                 stmt = delete(model).where(filter_col == values[0])

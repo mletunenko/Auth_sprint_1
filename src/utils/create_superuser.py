@@ -34,9 +34,7 @@ def create_superuser(
         role = session.execute(select(Role).where(Role.title == "superuser"))
         role = role.scalars().first()
         if not role:
-            role = Role(
-                title="superuser", system_role=True
-            )  # Add other required fields if necessary
+            role = Role(title="superuser", system_role=True)  # Add other required fields if necessary
             session.add(role)
             session.commit()
             session.refresh(role)

@@ -15,6 +15,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(nullable=False)
     first_name: Mapped[str] = mapped_column(nullable=False, default="")
     last_name: Mapped[str] = mapped_column(nullable=False, default="")
+    birth_date: Mapped[datetime.date] = mapped_column(nullable=True, default=None)
 
     role_id: Mapped[UUID4 | None] = mapped_column(ForeignKey("roles.id", ondelete="SET NULL"))
     role: Mapped["Role"] = relationship(lazy="joined")

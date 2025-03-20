@@ -21,7 +21,12 @@ async def authorize_by_user_id(
 ) -> tuple[ServiceWorkResults, TokenInfo | None, str | None]:
     try:
         user: models.User | None = await repository.get(
-            models.User, models.User.id, user_id, [joinedload(models.User.role),]
+            models.User,
+            models.User.id,
+            user_id,
+            [
+                joinedload(models.User.role),
+            ],
         )
     except SQLAlchemyError as e:
         logger.exception(f"Database error: {e}")
@@ -35,30 +40,26 @@ async def authorize_by_user_id(
         roles_claim = None
 
     claims = {"roles": roles_claim}
-    access_token = await authorize.create_access_token(
-        subject=str(user.id), user_claims=claims
-    )
-    refresh_token = await authorize.create_refresh_token(
-        subject=str(user.id), user_claims=claims
-    )
+    access_token = await authorize.create_access_token(subject=str(user.id), user_claims=claims)
+    refresh_token = await authorize.create_refresh_token(subject=str(user.id), user_claims=claims)
     return ServiceWorkResults.SUCCESS, TokenInfo(access=access_token, refresh=refresh_token), "ok"
 
 
 @backoff.on_exception(backoff.expo, ConnectionError, max_time=15)
 async def invalidate_token(
-        token: dict,
-        redis: Redis,
+    token: dict,
+    redis: Redis,
 ) -> bool:
     jti = token["jti"]
     exp = token["exp"]
     return await redis.setex(f"blacklist:{jti}", exp - int(datetime.datetime.now().timestamp()), "true")
 
+
 @backoff.on_exception(backoff.expo, ConnectionError, max_time=15)
 async def check_invalid_token(
-        token: dict,
-        redis: Redis,
+    token: dict,
+    redis: Redis,
 ) -> bool:
     jti = token["jti"]
-    res =  await redis.get(f"blacklist:{jti}")
+    res = await redis.get(f"blacklist:{jti}")
     return res
-

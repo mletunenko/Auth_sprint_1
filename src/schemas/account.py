@@ -13,7 +13,7 @@ class HistoryMeta(BaseModel):
 class HistoryItem(BaseModel):
     date_time: str
     ip_address: str
-    user_agent: str    
+    user_agent: str
 
 
 class LoginHistoryOut(BaseModel):

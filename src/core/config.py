@@ -44,7 +44,7 @@ class YandexAuth(BaseModel):
     client_id: str = "bb42c906391e4aa6ab53d4ac7359b8a4"
     client_secret: str = "f297dc281fe44371bf812f3df0326dae"
     redirect_uri: str = "http://127.0.0.1:8000/auth/yandex_id_login/primary_redirect"
-    oauth_url:str = "https://oauth.yandex.ru/authorize"
+    oauth_url: str = "https://oauth.yandex.ru/authorize"
     token_url: str = "https://oauth.yandex.ru/token"
     user_info_url: str = "https://login.yandex.ru/info"
 

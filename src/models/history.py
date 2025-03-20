@@ -10,9 +10,7 @@ from .base import Base
 class LoginHistory(Base):
     __tablename__ = "login_history"
 
-    user_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("users.id", ondelete="cascade"), nullable=False
-    )
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="cascade"), nullable=False)
     timestamp: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP(timezone=True), default=datetime.datetime.now(datetime.timezone.utc)
     )
