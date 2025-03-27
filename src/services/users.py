@@ -1,7 +1,9 @@
+import aiohttp
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
+from core.config import settings
 from models import User
 from schemas.user import UserLoginIn, UserRegisterIn
 
@@ -14,6 +16,11 @@ async def create_user(
     user.set_password(user_create.password)
     session.add(user)
     await session.commit()
+
+    url = f"http://{settings.notification_server.host}:{settings.notification_server.port}{settings.notification_server.welcome_path}?user_id={user.id}"
+    async with aiohttp.ClientSession() as session:
+        await session.post(url)
+
     return user
 
 

@@ -59,6 +59,12 @@ class RateLimiter(BaseModel):
     times: int = 20
 
 
+class NotificationConfig(BaseModel):
+    host: str = "127.0.0.1"
+    port: str = "8005"
+    welcome_path: str = "/api/notifications/create_welcome_task"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".dev.env"),
@@ -75,6 +81,7 @@ class Settings(BaseSettings):
     enable_tracer: bool = True
     jaeger: JaegerConfig = JaegerConfig()
     rate_limiter: RateLimiter = RateLimiter()
+    notification_server: NotificationConfig = NotificationConfig()
 
 
 settings = Settings()
