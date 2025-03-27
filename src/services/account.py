@@ -22,12 +22,7 @@ async def account_page(user_id: UUID4, session: AsyncSession) -> UserAccountOut 
     if not user:
         return None
 
-    return UserAccountOut(
-        email=user.email,
-        first_name=user.first_name,
-        last_name=user.last_name,
-        birth_date=user.birth_date,
-    )
+    return UserAccountOut.model_validate(user, from_attributes=True)
 
 
 async def get_login_history(

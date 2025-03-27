@@ -3,8 +3,9 @@ from pydantic import UUID4
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.dependencies import get_session
-from schemas.user import UserAccountOut
+from schemas.user import UserAccountOut, UserListParams
 from services.account import account_page as service_account_page
+from services.users import service_user_list
 
 router = APIRouter(tags=["users"])
 
@@ -18,3 +19,12 @@ async def get_user(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+
+@router.get("/users/", summary="Список пользователей")
+async def list_users(
+    session: AsyncSession = Depends(get_session), query_params: UserListParams = Depends()
+) -> list[UserAccountOut]:
+    user_list = await service_user_list(session, query_params)
+    response = [UserAccountOut.model_validate(user, from_attributes=True) for user in user_list]
+    return response

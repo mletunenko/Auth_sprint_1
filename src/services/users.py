@@ -5,7 +5,7 @@ from sqlalchemy.future import select
 
 from core.config import settings
 from models import User
-from schemas.user import UserLoginIn, UserRegisterIn
+from schemas.user import UserListParams, UserLoginIn, UserRegisterIn
 
 
 async def create_user(
@@ -47,3 +47,18 @@ async def get_user_by_email(
     result = await session.execute(select(User).where(User.email == email))
     existing_user = result.scalars().first()
     return existing_user
+
+
+async def service_user_list(
+    session: AsyncSession,
+    query_params: UserListParams,
+):
+    stmt = select(User)
+    if query_params.birth_date:
+        stmt = stmt.where(User.birth_date == query_params.birth_date)
+    stmt = stmt.offset((query_params.pagination.page_number - 1) * query_params.pagination.page_size).limit(
+        query_params.pagination.page_size
+    )
+    result = await session.execute(stmt)
+    user_list = result.scalars().all()
+    return user_list

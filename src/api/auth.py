@@ -18,7 +18,7 @@ from models import User
 from models.history import LoginHistory
 from schemas.enums import ServiceWorkResults
 from schemas.token import TokenInfo
-from schemas.user import UserLoginIn, UserLoginOut, UserRegisterIn, UserRegisterOut
+from schemas.user import UserAccountOut, UserLoginIn, UserLoginOut, UserRegisterIn
 from services.oauth import get_provider_by_name, get_user_by_provider_user_id, save_oauth_account
 from services.token import authorize_by_user_id, check_invalid_token, invalidate_token
 from services.users import create_user as services_create_user
@@ -68,11 +68,11 @@ async def handle_login(
     )
 
 
-@router.post("/register", response_model=UserRegisterOut)
+@router.post("/register", response_model=UserAccountOut)
 async def create_user(
     user_create: UserRegisterIn,
     session: AsyncSession = Depends(get_session),
-) -> UserRegisterOut:
+) -> UserAccountOut:
     existing_user = await get_user_by_email(
         user_create.email,
         session,
