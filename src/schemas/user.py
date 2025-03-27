@@ -1,7 +1,7 @@
 from datetime import date
 
 from fastapi import Depends
-from pydantic import UUID4, BaseModel, EmailStr
+from pydantic import UUID4, BaseModel, EmailStr, Field
 
 from schemas.base import PaginationParams
 from schemas.token import TokenInfo
@@ -35,5 +35,6 @@ class UserAccountOut(BaseModel):
 
 
 class UserListParams(BaseModel):
-    birth_date: date | None = None
+    birth_day: int | None = Field(None, description="День даты рождения", ge=1, le=31)
+    birth_month: int | None = Field(None, description="Месяц даты рождения", ge=1, le=12)
     pagination: PaginationParams = Depends()

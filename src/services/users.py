@@ -1,5 +1,6 @@
 import aiohttp
 from fastapi import HTTPException, status
+from sqlalchemy import extract
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -54,8 +55,12 @@ async def service_user_list(
     query_params: UserListParams,
 ):
     stmt = select(User)
-    if query_params.birth_date:
-        stmt = stmt.where(User.birth_date == query_params.birth_date)
+    if query_params.birth_day:
+        stmt = stmt.filter(extract("day", User.birth_date) == query_params.birth_day)
+
+    if query_params.birth_month:
+        stmt = stmt.filter(extract("month", User.birth_date) == query_params.birth_month)
+
     stmt = stmt.offset((query_params.pagination.page_number - 1) * query_params.pagination.page_size).limit(
         query_params.pagination.page_size
     )
