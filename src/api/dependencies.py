@@ -9,12 +9,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from db.postgres import PostgresHelper, get_pg_helper
 from db.redis import get_redis_connection
 from db.repository import AsyncBaseRepository, AsyncSqlAlchemyRepository
-from schemas.enums import SystemRoles
-from services.role import RoleService
-
-
-def get_role_service():
-    return RoleService
 
 
 async def get_session(pg_helper: PostgresHelper = Depends(get_pg_helper)) -> AsyncGenerator[AsyncSession, None]:
@@ -45,10 +39,3 @@ async def check_invalid_token(
 
     if res is not None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid")
-
-
-async def check_superuser(token_claims: dict[Any, Any] = Depends(get_token_сlaims)):
-    user_role = token_claims.get("roles")
-
-    if user_role != SystemRoles.SUPERUSER:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access forbidden: Superuser required")

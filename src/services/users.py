@@ -6,13 +6,19 @@ from sqlalchemy.future import select
 
 from core.config import settings
 from models import User
-from schemas.user import UserListParams, UserLoginIn, UserRegisterIn
+from schemas.user import UserIn, UserListParams
 
 
-async def create_user(
-    user_create: UserRegisterIn,
+async def service_create_user(
+    user_create: UserIn,
     session: AsyncSession,
 ) -> User:
+    existing_user = await get_user_by_email(
+        user_create.email,
+        session,
+    )
+    if existing_user:
+        raise HTTPException(status_code=400, detail="User with this username or email already exists")
     user = User(**user_create.model_dump())
     user.set_password(user_create.password)
     session.add(user)
@@ -26,7 +32,7 @@ async def create_user(
 
 
 async def validate_auth_user_login(
-    user: UserLoginIn,
+    user: UserIn,
     session: AsyncSession,
 ) -> User:
     """

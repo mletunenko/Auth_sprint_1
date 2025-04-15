@@ -17,7 +17,6 @@ from redis.asyncio import Redis
 
 from api.account import router as account_router
 from api.auth import router as auth_router
-from api.role import router as role_router
 from api.users import router as users_router
 from core.config import settings
 from db import postgres, redis
@@ -25,7 +24,6 @@ from db import postgres, redis
 combined_router = APIRouter()
 combined_router.include_router(auth_router)
 combined_router.include_router(account_router)
-combined_router.include_router(role_router, prefix="/role")
 combined_router.include_router(users_router)
 
 

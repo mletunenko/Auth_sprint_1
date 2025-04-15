@@ -1,6 +1,7 @@
 import asyncio
 from logging import getLogger
 
+import aiohttp
 import httpx
 from async_fastapi_jwt_auth import AuthJWT
 from async_fastapi_jwt_auth.auth_jwt import AuthJWTBearer
@@ -10,25 +11,19 @@ from passlib.utils import generate_password
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.exceptions import Http400, Http500
 from core.config import settings
 from db.redis import get_redis_connection
-from db.repository import AsyncBaseRepository
 from models import User
 from models.history import LoginHistory
-from schemas.enums import ServiceWorkResults
 from schemas.token import TokenInfo
-from schemas.user import UserAccountOut, UserLoginIn, UserLoginOut, UserRegisterIn
-from services.oauth import get_provider_by_name, get_user_by_provider_user_id, save_oauth_account
-from services.token import authorize_by_user_id, check_invalid_token, invalidate_token
-from services.users import create_user as services_create_user
-from services.users import get_user_by_email, validate_auth_user_login
-from utils.email_generator import generate_email
+from schemas.user import UserIn, UserTokensOut
+from services.oauth import get_provider_by_name, save_oauth_account
+from services.token import check_invalid_token, invalidate_token
+from services.users import get_user_by_email, service_create_user, validate_auth_user_login
 
-from .dependencies import check_invalid_token as check_invalid_token_depcy
-from .dependencies import check_superuser, get_session, get_sqlalchemy_repository
+from .dependencies import get_session
 
-router = APIRouter()
+router = APIRouter(tags=["auth"])
 auth_bearer = AuthJWTBearer()
 
 logger = getLogger(__name__)
@@ -39,16 +34,10 @@ async def handle_login(
     request: Request,
     session: AsyncSession,
     authorize: AuthJWT,
-) -> UserLoginOut:
-    try:
-        roles_claim = user.role.title
-    except AttributeError:
-        roles_claim = None
-
-    claims = {"roles": roles_claim}
+) -> UserTokensOut:
     # Создание токенов
-    access_token = await authorize.create_access_token(subject=str(user.id), user_claims=claims, expires_time=60 * 30)
-    refresh_token = await authorize.create_refresh_token(subject=str(user.id), user_claims=claims)
+    access_token = await authorize.create_access_token(subject=str(user.id), expires_time=60 * 30)
+    refresh_token = await authorize.create_refresh_token(subject=str(user.id))
 
     # Сохранение истории входа
     ip_address = request.client.host
@@ -57,42 +46,39 @@ async def handle_login(
     session.add(login_history)
     await session.commit()
 
-    user_role = user.role.title if user.role else user.role
-
-    return UserLoginOut(
+    return UserTokensOut(
         access=access_token,
         refresh=refresh_token,
         id=user.id,
         email=user.email,
-        role=user_role,
     )
 
 
-@router.post("/register", response_model=UserAccountOut)
-async def create_user(
-    user_create: UserRegisterIn,
-    session: AsyncSession = Depends(get_session),
-) -> UserAccountOut:
-    existing_user = await get_user_by_email(
-        user_create.email,
-        session,
-    )
-    if existing_user:
-        raise HTTPException(status_code=400, detail="User with this username or email already exists")
-    user = await services_create_user(
-        user_create=user_create,
-        session=session,
-    )
-    return user
+# @router.post("/register", response_model=UserOut)
+# async def create_user(
+#     user_create: UserRegisterIn,
+#     session: AsyncSession = Depends(get_session),
+# ) -> UserOut:
+#     existing_user = await get_user_by_email(
+#         user_create.email,
+#         session,
+#     )
+#     if existing_user:
+#         raise HTTPException(status_code=400, detail="User with this username or email already exists")
+#     user = await services_create_user(
+#         user_create=user_create,
+#         session=session,
+#     )
+#     return user
 
 
-@router.post("/login", response_model=UserLoginOut)
+@router.post("/login", response_model=UserTokensOut)
 async def login(
-    user: UserLoginIn,
+    user: UserIn,
     request: Request,
     session: AsyncSession = Depends(get_session),
     authorize: AuthJWT = Depends(auth_bearer),
-) -> UserLoginOut:
+) -> UserTokensOut:
     validated_user = await validate_auth_user_login(user, session)
     return await handle_login(validated_user, request, session, authorize)
 
@@ -129,28 +115,6 @@ async def logout(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid")
 
 
-@router.post(
-    "/supervised_login/{user_id}",
-    dependencies=[
-        Depends(check_invalid_token_depcy),
-        Depends(check_superuser),
-    ],
-)
-async def supervised_login(
-    user_id: str,
-    repository: AsyncBaseRepository = Depends(get_sqlalchemy_repository),
-    authorize: AuthJWT = Depends(auth_bearer),
-) -> TokenInfo | None:
-    result, token_pair, res_msg = await authorize_by_user_id(user_id, authorize, repository)
-
-    if result is ServiceWorkResults.ERROR:
-        raise Http500
-    if result is ServiceWorkResults.FAIL:
-        raise Http400(res_msg)
-
-    return token_pair
-
-
 @router.get("/social_auth")
 async def social_auth(
     provider: str,
@@ -167,24 +131,24 @@ async def social_auth(
     raise HTTPException(status_code=400, detail="Неизвестный провайдер")
 
 
+# @router.get("/yandex_id_login/primary_redirect")
+# async def yandex_id_redirect_redirect(
+#     request: Request,
+# ) -> RedirectResponse:
+#     code = request.query_params.get("code")
+#     redirect_url = f"http://127.0.0.1:8000/auth/yandex_id_login/redirect?code={code}"
+#     return RedirectResponse(url=redirect_url)
+
+
 @router.get("/yandex_id_login/primary_redirect")
-async def yandex_id_redirect_redirect(
-    request: Request,
-) -> RedirectResponse:
-    code = request.query_params.get("code")
-    redirect_url = f"http://127.0.0.1:8000/auth/yandex_id_login/redirect?code={code}"
-    return RedirectResponse(url=redirect_url)
-
-
-@router.get("/yandex_id_login/redirect")
 async def yandex_id_redirect(
     request: Request,
     session: AsyncSession = Depends(get_session),
     authorize: AuthJWT = Depends(auth_bearer),
     redis_con: Redis = Depends(get_redis_connection),
-) -> UserLoginOut:
+) -> TokenInfo:
     """
-    Обрабатывает callback, создает пользователя в БД, если он не существует,
+    Обрабатывает callback, создает пользователя в БД и профиль если они не существует,
     и возвращает информацию о входе.
     """
     user = None
@@ -234,21 +198,28 @@ async def yandex_id_redirect(
         user_data = data_response.json()
 
         email = user_data["default_email"]
-        if email:
-            user = await get_user_by_email(email, session)
+
+        if not email:
+            raise HTTPException(status_code=400, detail="Не был получен email пользователя")
+
+        user = await get_user_by_email(email, session)
+
         if not user:
-            user = await get_user_by_provider_user_id(
-                user_data["id"],
-                session,
-            )
-        if not user:
-            user_create = UserRegisterIn(
-                email=user_data.get("default_email", generate_email()), password=generate_password()
-            )
-            user = await services_create_user(
+            user_create = UserIn(email=user_data.get("default_email"), password=generate_password())
+            user = await service_create_user(
                 user_create=user_create,
                 session=session,
             )
+            create_profile_url = (
+                f"{settings.profile_service.host}:{settings.profile_service.port}"
+                f"{settings.profile_service.create_profile_path}"
+            )
+            profile_dict = {
+                "email": email,
+            }
+            async with aiohttp.ClientSession() as aiohttp_session:
+                response = await aiohttp_session.post(create_profile_url, json=profile_dict)
+                pass
 
         yandex_provider = await get_provider_by_name("yandex", session)
 

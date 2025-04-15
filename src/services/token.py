@@ -34,14 +34,9 @@ async def authorize_by_user_id(
 
     if user is None:
         return ServiceWorkResults.FAIL, None, "User not found"
-    try:
-        roles_claim = user.role.title
-    except AttributeError:
-        roles_claim = None
 
-    claims = {"roles": roles_claim}
-    access_token = await authorize.create_access_token(subject=str(user.id), user_claims=claims)
-    refresh_token = await authorize.create_refresh_token(subject=str(user.id), user_claims=claims)
+    access_token = await authorize.create_access_token(subject=str(user.id))
+    refresh_token = await authorize.create_refresh_token(subject=str(user.id))
     return ServiceWorkResults.SUCCESS, TokenInfo(access=access_token, refresh=refresh_token), "ok"
 
 

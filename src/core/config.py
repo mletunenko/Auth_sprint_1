@@ -65,6 +65,12 @@ class NotificationConfig(BaseModel):
     welcome_path: str = "/api/notifications/create_welcome_task"
 
 
+class ProfileConfig(BaseModel):
+    host: str = "127.0.0.1"
+    port: str = "8006"
+    create_profile_path: str = "/api/profile"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env"),
@@ -82,6 +88,7 @@ class Settings(BaseSettings):
     jaeger: JaegerConfig = JaegerConfig()
     rate_limiter: RateLimiter = RateLimiter()
     notification_server: NotificationConfig = NotificationConfig()
+    profile_service: ProfileConfig = ProfileConfig()
 
 
 settings = Settings()

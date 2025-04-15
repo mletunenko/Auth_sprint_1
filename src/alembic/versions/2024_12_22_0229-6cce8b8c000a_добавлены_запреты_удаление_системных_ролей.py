@@ -15,7 +15,6 @@ import sqlalchemy as sa
 import models
 from alembic import op
 from core.config import settings
-from schemas.enums import SystemRoles
 
 # revision identifiers, used by Alembic.
 revision: str = "6cce8b8c000a"

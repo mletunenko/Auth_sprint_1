@@ -1,9 +1,4 @@
-from enum import IntEnum, StrEnum
-
-
-class SystemRoles(StrEnum):
-    SUPERUSER = "superuser"
-    ADMIN = "admin"
+from enum import IntEnum
 
 
 class ServiceWorkResults(IntEnum):
