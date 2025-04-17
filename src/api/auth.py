@@ -131,16 +131,16 @@ async def social_auth(
     raise HTTPException(status_code=400, detail="Неизвестный провайдер")
 
 
-# @router.get("/yandex_id_login/primary_redirect")
-# async def yandex_id_redirect_redirect(
-#     request: Request,
-# ) -> RedirectResponse:
-#     code = request.query_params.get("code")
-#     redirect_url = f"http://127.0.0.1:8000/auth/yandex_id_login/redirect?code={code}"
-#     return RedirectResponse(url=redirect_url)
-
-
 @router.get("/yandex_id_login/primary_redirect")
+async def yandex_id_redirect_redirect(
+    request: Request,
+) -> RedirectResponse:
+    code = request.query_params.get("code")
+    redirect_url = f"http://127.0.0.1:8000/auth/yandex_id_login/redirect?code={code}"
+    return RedirectResponse(url=redirect_url)
+
+
+@router.get("/yandex_id_login/redirect")
 async def yandex_id_redirect(
     request: Request,
     session: AsyncSession = Depends(get_session),
@@ -210,16 +210,6 @@ async def yandex_id_redirect(
                 user_create=user_create,
                 session=session,
             )
-            create_profile_url = (
-                f"{settings.profile_service.host}:{settings.profile_service.port}"
-                f"{settings.profile_service.create_profile_path}"
-            )
-            profile_dict = {
-                "email": email,
-            }
-            async with aiohttp.ClientSession() as aiohttp_session:
-                response = await aiohttp_session.post(create_profile_url, json=profile_dict)
-                pass
 
         yandex_provider = await get_provider_by_name("yandex", session)
 
