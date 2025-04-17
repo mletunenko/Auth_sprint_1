@@ -7,19 +7,6 @@ from schemas.account import HistoryItem, HistoryMeta, LoginHistoryOut
 from schemas.user import UserOut
 
 
-async def account_page(user_id: UUID4, session: AsyncSession) -> UserOut | None:
-    """
-    Метод возвращяет данные по юзеру по его id
-    """
-    stmt = select(User).where(User.id == user_id)
-
-    result = await session.execute(stmt)
-    user = result.scalars().first()
-
-    if not user:
-        return None
-
-    return user
 
 
 async def get_login_history(

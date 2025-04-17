@@ -1,13 +1,28 @@
 import aiohttp
 from fastapi import HTTPException, status
+from pydantic import UUID4
 from sqlalchemy import extract
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from core.config import settings
 from models import User
-from schemas.user import UserIn, UserListParams
+from schemas.user import UserIn, UserListParams, UserOut, UserPatch
 
+
+async def get_user_by_id(user_id: UUID4, session: AsyncSession) -> UserOut | None:
+    """
+    Метод возвращяет данные по юзеру по его id
+    """
+    stmt = select(User).where(User.id == user_id)
+
+    result = await session.execute(stmt)
+    user = result.scalars().first()
+
+    if not user:
+        return None
+
+    return user
 
 async def service_create_user(
     user_create: UserIn,
@@ -24,9 +39,9 @@ async def service_create_user(
     session.add(user)
     await session.commit()
 
-    url = f"http://{settings.notification_server.host}:{settings.notification_server.port}{settings.notification_server.welcome_path}?user_id={user.id}"
+    notification_url = f"http://{settings.notification_server.host}:{settings.notification_server.port}{settings.notification_server.welcome_path}?user_id={user.id}"
     async with aiohttp.ClientSession() as session:
-        await session.post(url)
+        await session.post(notification_url)
 
     return user
 
@@ -59,13 +74,10 @@ async def get_user_by_email(
 async def service_user_list(
     session: AsyncSession,
     query_params: UserListParams,
-):
+) -> list[User]:
     stmt = select(User)
-    if query_params.birth_day:
-        stmt = stmt.filter(extract("day", User.birth_date) == query_params.birth_day)
-
-    if query_params.birth_month:
-        stmt = stmt.filter(extract("month", User.birth_date) == query_params.birth_month)
+    if query_params.email:
+        stmt = stmt.filter(User.email == query_params.email)
 
     stmt = stmt.offset((query_params.pagination.page_number - 1) * query_params.pagination.page_size).limit(
         query_params.pagination.page_size
@@ -73,3 +85,26 @@ async def service_user_list(
     result = await session.execute(stmt)
     user_list = result.scalars().all()
     return user_list
+
+async def service_user_delete(
+        user_id: UUID4,
+        session: AsyncSession,
+) -> None:
+    user = await get_user_by_id(user_id, session)
+    await session.delete(user)
+    await session.commit()
+
+
+async def service_user_patch(
+        user_id: UUID4,
+        data: UserPatch,
+        session: AsyncSession,
+) -> User:
+    user = await get_user_by_id(user_id, session)
+    update_data = data.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(user, field, value)
+    await session.commit()
+    return user
+
+
