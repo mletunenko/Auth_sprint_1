@@ -21,6 +21,11 @@ class UserTokensOut(TokenInfo):
 
 
 class UserListParams(BaseModel):
-    birth_day: int | None = Field(None, description="День даты рождения", ge=1, le=31)
-    birth_month: int | None = Field(None, description="Месяц даты рождения", ge=1, le=12)
+    email: EmailStr | None = None
     pagination: PaginationParams = Depends()
+
+
+class UserPatch(BaseModel):
+    email: EmailStr | None = None
+    password: str | None = None
+
