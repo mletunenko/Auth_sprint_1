@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import Depends
 from pydantic import UUID4, BaseModel, EmailStr, Field
 
@@ -13,6 +15,8 @@ class UserIn(BaseModel):
 class UserOut(BaseModel):
     id: UUID4
     email: EmailStr
+    created_at: datetime
+    updated_at: datetime
 
 
 class UserTokensOut(TokenInfo):
