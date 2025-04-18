@@ -5,6 +5,7 @@ from pydantic import UUID4, BaseModel, EmailStr, Field
 
 from schemas.base import PaginationParams
 from schemas.token import TokenInfo
+from utils.enums import UserRoleEnum
 
 
 class UserIn(BaseModel):
@@ -15,6 +16,7 @@ class UserIn(BaseModel):
 class UserOut(BaseModel):
     id: UUID4
     email: EmailStr
+    role: UserRoleEnum = UserRoleEnum.BASIC
     created_at: datetime
     updated_at: datetime
 

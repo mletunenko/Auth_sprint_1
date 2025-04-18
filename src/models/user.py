@@ -1,9 +1,10 @@
 import datetime
 
 from passlib.handlers.pbkdf2 import pbkdf2_sha256
-from sqlalchemy import TIMESTAMP
+from sqlalchemy import TIMESTAMP, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from utils.enums import UserRoleEnum
 from .base import Base
 
 
@@ -13,6 +14,8 @@ class User(Base):
     password: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False)
     oauth_accounts = relationship("OAuthAccount", back_populates="user", cascade="all, delete-orphan")
+    role: Mapped[UserRoleEnum] = mapped_column(Enum(UserRoleEnum, name="role"), default=UserRoleEnum.BASIC)
+
 
     updated_at: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP(timezone=True),
