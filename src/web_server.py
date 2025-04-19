@@ -1,3 +1,4 @@
+import asyncio
 import uuid
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
@@ -20,6 +21,7 @@ from api.auth import router as auth_router
 from api.users import router as users_router
 from core.config import settings
 from db import postgres, redis
+from db.rabbit import RabbitMQConnection
 
 combined_router = APIRouter()
 combined_router.include_router(auth_router)
@@ -86,6 +88,9 @@ def authjwt_exception_handler(request: Request, exc: AuthJWTException):
 
 
 if __name__ == "__main__":
+    rabbit = RabbitMQConnection()
+    asyncio.run(rabbit.declare_queues())
+
     uvicorn.run(
         "web_server:app",
         host=settings.run.host,

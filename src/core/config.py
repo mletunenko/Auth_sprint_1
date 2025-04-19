@@ -65,6 +65,12 @@ class RabbitConfig(BaseModel):
     password: str = "password"
 
 
+class AuthConfig(BaseModel):
+    host: str = "localhost"
+    port: int = 8000
+    users_path: str = "/auth/users"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env"),
@@ -82,6 +88,7 @@ class Settings(BaseSettings):
     jaeger: JaegerConfig = JaegerConfig()
     rate_limiter: RateLimiter = RateLimiter()
     rabbit: RabbitConfig = RabbitConfig()
+    auth: AuthConfig = AuthConfig()
 
 
 settings = Settings()
