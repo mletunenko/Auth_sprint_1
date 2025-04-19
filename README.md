@@ -41,6 +41,7 @@ pip install --upgrade pip && pip install -r requirements.txt
 
 ```bash
 dc up [--build] -d auth_postgres auth_redis
+dc up --build auth_postgres auth_redis
 ```
 
 4. Запуск приложения

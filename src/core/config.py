@@ -59,16 +59,10 @@ class RateLimiter(BaseModel):
     times: int = 20
 
 
-class NotificationConfig(BaseModel):
-    host: str = "127.0.0.1"
-    port: str = "8005"
-    welcome_path: str = "/api/notifications/create_welcome_task"
-
-
-class ProfileConfig(BaseModel):
-    host: str = "127.0.0.1"
-    port: str = "8006"
-    create_profile_path: str = "/api/profile"
+class RabbitConfig(BaseModel):
+    host: str = "localhost"
+    login: str = "admin"
+    password: str = "password"
 
 
 class Settings(BaseSettings):
@@ -87,8 +81,7 @@ class Settings(BaseSettings):
     enable_tracer: bool = True
     jaeger: JaegerConfig = JaegerConfig()
     rate_limiter: RateLimiter = RateLimiter()
-    notification_server: NotificationConfig = NotificationConfig()
-    profile_service: ProfileConfig = ProfileConfig()
+    rabbit: RabbitConfig = RabbitConfig()
 
 
 settings = Settings()

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from fastapi import Depends
-from pydantic import UUID4, BaseModel, EmailStr, Field
+from pydantic import UUID4, BaseModel, EmailStr
 
 from schemas.base import PaginationParams
 from schemas.token import TokenInfo
@@ -34,4 +34,3 @@ class UserListParams(BaseModel):
 class UserPatch(BaseModel):
     email: EmailStr | None = None
     password: str | None = None
-

@@ -2,11 +2,8 @@ from pydantic import UUID4
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models import LoginHistory, User
+from models import LoginHistory
 from schemas.account import HistoryItem, HistoryMeta, LoginHistoryOut
-from schemas.user import UserOut
-
-
 
 
 async def get_login_history(

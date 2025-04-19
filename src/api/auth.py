@@ -1,7 +1,6 @@
 import asyncio
 from logging import getLogger
 
-import aiohttp
 import httpx
 from async_fastapi_jwt_auth import AuthJWT
 from async_fastapi_jwt_auth.auth_jwt import AuthJWTBearer

@@ -5,6 +5,7 @@ from sqlalchemy import TIMESTAMP, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from utils.enums import UserRoleEnum
+
 from .base import Base
 
 
@@ -15,7 +16,6 @@ class User(Base):
     email: Mapped[str] = mapped_column(nullable=False)
     oauth_accounts = relationship("OAuthAccount", back_populates="user", cascade="all, delete-orphan")
     role: Mapped[UserRoleEnum] = mapped_column(Enum(UserRoleEnum, name="role"), default=UserRoleEnum.BASIC)
-
 
     updated_at: Mapped[datetime.datetime] = mapped_column(
         TIMESTAMP(timezone=True),

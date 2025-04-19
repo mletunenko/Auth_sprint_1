@@ -1,11 +1,8 @@
-import aiohttp
 from fastapi import HTTPException, status
 from pydantic import UUID4
-from sqlalchemy import extract
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from core.config import settings
 from models import User
 from schemas.user import UserIn, UserListParams, UserOut, UserPatch
 
@@ -24,6 +21,7 @@ async def get_user_by_id(user_id: UUID4, session: AsyncSession) -> UserOut | Non
 
     return user
 
+
 async def service_create_user(
     user_create: UserIn,
     session: AsyncSession,
@@ -38,11 +36,6 @@ async def service_create_user(
     user.set_password(user_create.password)
     session.add(user)
     await session.commit()
-
-    notification_url = f"http://{settings.notification_server.host}:{settings.notification_server.port}{settings.notification_server.welcome_path}?user_id={user.id}"
-    async with aiohttp.ClientSession() as session:
-        await session.post(notification_url)
-
     return user
 
 
@@ -86,9 +79,10 @@ async def service_user_list(
     user_list = result.scalars().all()
     return user_list
 
+
 async def service_user_delete(
-        user_id: UUID4,
-        session: AsyncSession,
+    user_id: UUID4,
+    session: AsyncSession,
 ) -> None:
     user = await get_user_by_id(user_id, session)
     await session.delete(user)
@@ -96,9 +90,9 @@ async def service_user_delete(
 
 
 async def service_user_patch(
-        user_id: UUID4,
-        data: UserPatch,
-        session: AsyncSession,
+    user_id: UUID4,
+    data: UserPatch,
+    session: AsyncSession,
 ) -> User:
     user = await get_user_by_id(user_id, session)
     update_data = data.model_dump(exclude_unset=True)
@@ -106,5 +100,3 @@ async def service_user_patch(
         setattr(user, field, value)
     await session.commit()
     return user
-
-
