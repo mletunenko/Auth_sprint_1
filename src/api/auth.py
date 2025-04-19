@@ -35,8 +35,11 @@ async def handle_login(
     authorize: AuthJWT,
 ) -> UserTokensOut:
     # Создание токенов
-    access_token = await authorize.create_access_token(subject=str(user.id), expires_time=60 * 30)
-    refresh_token = await authorize.create_refresh_token(subject=str(user.id))
+    user_claims = {"role": user.role.value}
+    access_token = await authorize.create_access_token(
+        subject=str(user.id), expires_time=60 * 30, user_claims=user_claims
+    )
+    refresh_token = await authorize.create_refresh_token(subject=str(user.id), user_claims=user_claims)
 
     # Сохранение истории входа
     ip_address = request.client.host
