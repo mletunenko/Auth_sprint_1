@@ -1,12 +1,15 @@
+from async_fastapi_jwt_auth.auth_jwt import AuthJWT, AuthJWTBearer
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import UUID4
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import Response
-from starlette.status import HTTP_204_NO_CONTENT
+from starlette.status import HTTP_204_NO_CONTENT, HTTP_401_UNAUTHORIZED
 
 from api.dependencies import get_session
-from db.rabbit import RabbitDep
+from db.redis import get_redis_connection
 from schemas.user import UserIn, UserListParams, UserOut, UserPatch
+from services.token import check_invalid_token
 from services.users import (
     get_user_by_id,
     service_create_user,
@@ -16,6 +19,7 @@ from services.users import (
 )
 
 router = APIRouter(tags=["users"])
+auth_bearer = AuthJWTBearer()
 
 
 @router.get("/users/{user_id}", summary="Информация о user по id")
@@ -60,6 +64,17 @@ async def update_user(
     user_id: UUID4,
     data: UserPatch,
     session: AsyncSession = Depends(get_session),
+    authorize: AuthJWT = Depends(auth_bearer),
+    redis: Redis = Depends(get_redis_connection),
 ) -> UserOut:
+    await authorize.jwt_required()
+    token = await authorize.get_raw_jwt()
+    if await check_invalid_token(token, redis):
+        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Token invalid")
+
+    token_user_id: UUID4 = await authorize.get_jwt_subject()
+    if not token_user_id == str(user_id):
+        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Token invalid")
+
     user = await service_user_patch(user_id, data, session)
     return user

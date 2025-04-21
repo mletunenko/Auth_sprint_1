@@ -1,4 +1,5 @@
 from fastapi import HTTPException, status
+from passlib.handlers.pbkdf2 import pbkdf2_sha256
 from pydantic import UUID4
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -95,8 +96,19 @@ async def service_user_patch(
     session: AsyncSession,
 ) -> User:
     user = await get_user_by_id(user_id, session)
+
     update_data = data.model_dump(exclude_unset=True)
     for field, value in update_data.items():
-        setattr(user, field, value)
+        if field == "email":
+            stmt = select(User).where(User.email == update_data["email"]).where(User.id != str(user_id))
+            result = await session.execute(stmt)
+            existing_user = result.scalars().first()
+            if existing_user:
+                raise HTTPException(status_code=400, detail="User with this username or email already exists")
+
+        elif field == "password":
+            setattr(user, field, pbkdf2_sha256.hash(value))
+        else:
+            setattr(user, field, value)
     await session.commit()
     return user

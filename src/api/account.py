@@ -15,30 +15,6 @@ router = APIRouter()
 auth_bearer = AuthJWTBearer()
 
 
-# @router.patch("/update")
-# async def update_user(
-#     user_update: UserRegisterIn,
-#     session: AsyncSession = Depends(get_session),
-#     authorize: AuthJWT = Depends(auth_bearer),
-#     redis: Redis = Depends(get_redis_connection),
-# ) -> dict:
-#     """
-#     Эндпоинт для изменения информации о юзере
-#     """
-#     await authorize.jwt_required()
-#     token = await authorize.get_raw_jwt()
-#     if await check_invalid_token(token, redis):
-#         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid")
-#
-#     user_id: UUID4 = await authorize.get_jwt_subject()
-#
-#     return await update_user_data(
-#         user_id,
-#         user_update,
-#         session,
-#     )
-
-
 @router.get("/history", response_model=LoginHistoryOut)
 async def get_history(
     authorize: AuthJWT = Depends(auth_bearer),
