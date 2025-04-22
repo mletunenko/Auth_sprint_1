@@ -100,5 +100,17 @@ http://127.0.0.1/api/openapi
 Сервис административной панели 
 - https://github.com/mletunenko/new_admin_panel_sprint_3
 
-Сервис авторизации
+Сервис авторизации (текущий репозиторий)
 - https://github.com/mletunenko/Auth_sprint_1
+
+Сервис аналитики пользовательских действий
+- https://github.com/mletunenko/ugc_sprint_1
+
+Сервис хранения пользовательского контента
+- https://github.com/mletunenko/ugc_sprint_2
+
+Сервис уведомлений
+- https://github.com/mletunenko/notifications_sprint_1
+
+Сервис профили (Дипломный проект)
+- https://github.com/mletunenko/graduate_work
