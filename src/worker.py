@@ -5,6 +5,7 @@ import aio_pika
 import aiohttp
 
 from core.config import settings
+from core.consts import CREATE_USER_QUEUE, DELETE_USER_QUEUE
 
 
 async def process_create_message(message: aio_pika.IncomingMessage):
@@ -52,8 +53,8 @@ async def consume():
 
     async with connection:
         channel = await connection.channel()
-        create_user_queue = await channel.declare_queue("create_user", durable=True)
-        delete_user_queue = await channel.declare_queue("delete_user", durable=True)
+        create_user_queue = await channel.declare_queue(CREATE_USER_QUEUE, durable=True)
+        delete_user_queue = await channel.declare_queue(DELETE_USER_QUEUE, durable=True)
         await create_user_queue.consume(process_create_message, no_ack=False)
         await delete_user_queue.consume(process_delete_message, no_ack=False)
 

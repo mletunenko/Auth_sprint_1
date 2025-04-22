@@ -35,7 +35,10 @@ async def handle_login(
     authorize: AuthJWT,
 ) -> UserTokensOut:
     # Создание токенов
-    user_claims = {"role": user.role.value}
+    user_claims = {
+        "role": user.role.value,
+        "email": user.email,
+    }
     access_token = await authorize.create_access_token(
         subject=str(user.id), expires_time=60 * 30, user_claims=user_claims
     )
@@ -54,24 +57,6 @@ async def handle_login(
         id=user.id,
         email=user.email,
     )
-
-
-# @router.post("/register", response_model=UserOut)
-# async def create_user(
-#     user_create: UserRegisterIn,
-#     session: AsyncSession = Depends(get_session),
-# ) -> UserOut:
-#     existing_user = await get_user_by_email(
-#         user_create.email,
-#         session,
-#     )
-#     if existing_user:
-#         raise HTTPException(status_code=400, detail="User with this username or email already exists")
-#     user = await services_create_user(
-#         user_create=user_create,
-#         session=session,
-#     )
-#     return user
 
 
 @router.post("/login", response_model=UserTokensOut)

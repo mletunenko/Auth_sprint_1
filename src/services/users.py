@@ -105,6 +105,7 @@ async def service_user_patch(
             existing_user = result.scalars().first()
             if existing_user:
                 raise HTTPException(status_code=400, detail="User with this username or email already exists")
+            setattr(user, field, value)
 
         elif field == "password":
             setattr(user, field, pbkdf2_sha256.hash(value))
