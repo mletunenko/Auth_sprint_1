@@ -18,7 +18,7 @@ from services.users import (
     service_user_list,
     service_user_patch,
 )
-from sync.tasks import update_profile_email_task
+from sync.tasks import update_profile_email_task, delete_related_interactions_task
 
 router = APIRouter(tags=["users"])
 auth_bearer = AuthJWTBearer()
@@ -84,7 +84,9 @@ async def create_user(
 @router.delete("/users/{user_id}", summary="Удалить юзера")
 async def delete_user(
     user_id: UUID4,
+    rabbit_channel: RabbitDep,
     session: AsyncSession = Depends(get_session),
 ) -> Response:
     await service_user_delete(user_id, session)
+    await delete_related_interactions_task(user_id, rabbit_channel)
     return Response(status_code=HTTP_204_NO_CONTENT)

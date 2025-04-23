@@ -5,7 +5,7 @@ from aio_pika.abc import AbstractChannel
 from fastapi import Depends
 
 from core.config import settings
-from core.consts import UPDATE_EMAIL_QUEUE
+from core.consts import UPDATE_EMAIL_QUEUE, DELETE_RELATED_INTERACTIONS_QUEUE
 
 
 class RabbitMQConnection:
@@ -32,6 +32,7 @@ class RabbitMQConnection:
     async def declare_queues(self):
         channel = await self.get_channel()
         await channel.declare_queue(UPDATE_EMAIL_QUEUE, durable=True)
+        await channel.declare_queue(DELETE_RELATED_INTERACTIONS_QUEUE, durable=True)
 
 
 rabbitmq = RabbitMQConnection()
